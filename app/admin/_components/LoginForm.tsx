@@ -3,6 +3,7 @@
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import api from "@/src/lib/api";
 
 export default function LoginForm() {
   const [password, setPassword] = useState("");
@@ -14,15 +15,11 @@ export default function LoginForm() {
     e.preventDefault();
     setLoading(true);
     setError("");
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password }),
-    });
 
-    if (res.ok) {
+    try {
+      await api.post("/auth/login", { password });
       router.refresh();
-    } else {
+    } catch {
       setError("Senha incorreta.");
       setLoading(false);
     }

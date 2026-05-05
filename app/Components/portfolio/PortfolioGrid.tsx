@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo } from "react";
 import { portfolioItems } from "@/src/Utils/mockData";
 import { classNames } from "@/src/miscellaneous";
 import { PortfolioGallery } from "./PortfolioGallery";
+import api from "@/src/lib/api";
 
 interface PortfolioItem {
   id: string | number;
@@ -31,11 +32,9 @@ export const PortfolioGrid = () => {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const res = await fetch("/api/images");
-        if (!res.ok) throw new Error("Erro ao carregar imagens do servidor");
-        const data = await res.json();
+        const { data } = await api.get<DbImage[]>("/images");
 
-        const mapped = data.map((img: DbImage) => ({
+        const mapped = data.map((img) => ({
           id: img.id,
           image: img.url,
           title: img.title,

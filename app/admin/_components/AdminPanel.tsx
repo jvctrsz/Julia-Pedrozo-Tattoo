@@ -17,6 +17,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { classNames } from "@/src/miscellaneous";
 import { optimizeImage } from "@/src/Utils/cloudinaryOptimization";
+import api from "@/src/lib/api";
 
 interface ImageRecord {
   id: string;
@@ -45,8 +46,7 @@ export default function AdminPanel() {
 
   const fetchImages = useCallback(async () => {
     setLoadingImages(true);
-    const res = await fetch("/api/images");
-    const data = await res.json();
+    const { data } = await api.get<ImageRecord[]>("/images");
     setImages(data);
     setLoadingImages(false);
   }, []);
@@ -88,10 +88,15 @@ export default function AdminPanel() {
     setUploadError("");
 
     try {
-      const signRes = await fetch("/api/cloudinary/sign");
-      if (!signRes.ok) throw new Error("Falha ao obter assinatura.");
-      const { signature, timestamp, apiKey, cloudName, folder } =
-        await signRes.json();
+      const { data: signData } = await api.get<{
+        signature: string;
+        timestamp: number;
+        apiKey: string;
+        cloudName: string;
+        folder: string;
+      }>("/cloudinary/sign");
+
+      const { signature, timestamp, apiKey, cloudName, folder } = signData;
 
       const formData = new FormData();
       formData.append("file", file);
@@ -107,18 +112,12 @@ export default function AdminPanel() {
       if (!cloudRes.ok) throw new Error("Falha no upload para o Cloudinary.");
       const { secure_url, public_id } = await cloudRes.json();
 
-      const saveRes = await fetch("/api/images", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          url: secure_url,
-          publicId: public_id,
-          title: title.trim(),
-          category,
-        }),
+      await api.post("/images", {
+        url: secure_url,
+        publicId: public_id,
+        title: title.trim(),
+        category,
       });
-      if (!saveRes.ok) throw new Error("Falha ao salvar imagem.");
-
       setTitle("");
       setCategory(CATEGORIES[0]);
       clearFile();
@@ -132,13 +131,13 @@ export default function AdminPanel() {
 
   const handleDelete = async (id: string) => {
     setDeletingId(id);
-    await fetch(`/api/images/${id}`, { method: "DELETE" });
+    await api.delete(`/images/${id}`);
     setImages((prev) => prev.filter((img) => img.id !== id));
     setDeletingId(null);
   };
 
   const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
+    await api.post("/auth/logout");
     window.location.reload();
   };
 
