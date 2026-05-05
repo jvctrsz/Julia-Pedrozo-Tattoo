@@ -9,6 +9,7 @@ import {
   ChevronRightIcon,
 } from "@heroicons/react/24/outline";
 import { classNames } from "@/src/miscellaneous";
+import { optimizeImage } from "@/src/Utils/cloudinaryOptimization";
 
 interface LightboxItem {
   id: string | number;
@@ -127,7 +128,7 @@ export const ImageLightbox = ({
               style={{ maxHeight: "calc(100vh - 140px)" }}
             >
               <Image
-                src={current.image}
+                src={optimizeImage(current.image, 1600)}
                 alt={`${current.title} — ${current.category} por Julia Pedrozo`}
                 width={1080}
                 height={1350}

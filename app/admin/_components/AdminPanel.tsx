@@ -9,6 +9,7 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { classNames } from "@/src/miscellaneous";
+import { optimizeImage } from "@/src/Utils/cloudinaryOptimization";
 
 interface ImageRecord {
   id: string;
@@ -291,7 +292,7 @@ export default function AdminPanel() {
                   <li key={img.id} className="group relative">
                     <div className="relative aspect-3/4 bg-black/5 overflow-hidden">
                       <Image
-                        src={img.url}
+                        src={optimizeImage(img.url, 600)}
                         alt={`${img.title} — ${img.category}`}
                         fill
                         sizes="(max-width: 640px) 50vw, 33vw"

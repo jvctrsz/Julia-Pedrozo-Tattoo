@@ -4,6 +4,7 @@ import { motion, type HTMLMotionProps } from "motion/react";
 import Image from "next/image";
 import { MagnifyingGlassPlusIcon } from "@heroicons/react/24/outline";
 import { classNames } from "@/src/miscellaneous";
+import { optimizeImage } from "@/src/Utils/cloudinaryOptimization";
 
 interface Work {
   id: string | number;
@@ -38,7 +39,7 @@ export const WorkCard = ({
     >
       <figure className="w-full h-full m-0 p-0 relative">
         <Image
-          src={work.image}
+          src={optimizeImage(work.image, isFeatured ? 1200 : 800)}
           alt={`${work.title} — ${work.category} por Julia Pedrozo`}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
