@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 
@@ -10,7 +10,7 @@ export default function LoginForm() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, ChangeEvent, FormEvent } from "react";
 import Image from "next/image";
 import {
   ArrowRightIcon,
@@ -48,13 +48,22 @@ export default function AdminPanel() {
     fetchImages();
   }, [fetchImages]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setUploadError("");
     const selected = e.target.files?.[0] ?? null;
-    setFile(selected);
+
     if (selected) {
+      if (selected.size > 10485760) {
+        setUploadError(
+          "Arquivo muito grande. O tamanho máximo permitido é 10MB.",
+        );
+        clearFile();
+        return;
+      }
+      setFile(selected);
       setPreview(URL.createObjectURL(selected));
     } else {
-      setPreview(null);
+      clearFile();
     }
   };
 
@@ -64,7 +73,7 @@ export default function AdminPanel() {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const handleUpload = async (e: React.FormEvent) => {
+  const handleUpload = async (e: FormEvent) => {
     e.preventDefault();
     if (!file || !title.trim()) return;
 
@@ -158,6 +167,15 @@ export default function AdminPanel() {
             </h2>
 
             <form onSubmit={handleUpload} noValidate className="space-y-6">
+              {uploadError && (
+                <div
+                  role="alert"
+                  className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 text-xs uppercase tracking-widest"
+                >
+                  {uploadError}
+                </div>
+              )}
+
               <div>
                 <label
                   htmlFor="file-upload"
@@ -247,15 +265,6 @@ export default function AdminPanel() {
                 </div>
               </fieldset>
 
-              {uploadError && (
-                <p
-                  role="alert"
-                  className="text-red-500 text-xs uppercase tracking-widest"
-                >
-                  {uploadError}
-                </p>
-              )}
-
               <button
                 type="submit"
                 disabled={uploading || !file || !title.trim()}
@@ -298,29 +307,31 @@ export default function AdminPanel() {
                         sizes="(max-width: 640px) 50vw, 33vw"
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
-                    <div
-                      aria-hidden="true"
-                      className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
-                    >
-                      <button
-                        onClick={() => handleDelete(img.id)}
-                        disabled={deletingId === img.id}
-                        aria-label={`Deletar ${img.title}`}
-                        className="flex items-center gap-2 border border-white/40 text-white text-xs uppercase tracking-widest px-4 py-2 hover:bg-white hover:text-black transition-all disabled:opacity-40 cursor-pointer"
+                      <div
+                        aria-hidden="true"
+                        className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
                       >
-                        <TrashIcon className="size-4" />
-                        {deletingId === img.id ? "Deletando…" : "Deletar"}
-                      </button>
+                        <button
+                          onClick={() => handleDelete(img.id)}
+                          disabled={deletingId === img.id}
+                          aria-label={`Deletar ${img.title}`}
+                          className="flex items-center gap-2 border border-white/40 text-white text-xs uppercase tracking-widest px-4 py-2 hover:bg-white hover:text-black transition-all disabled:opacity-40 cursor-pointer"
+                        >
+                          <TrashIcon className="size-4" />
+                          {deletingId === img.id ? "Deletando…" : "Deletar"}
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                  <dl className="pt-3 space-y-0.5">
-                    <dt className="sr-only">Categoria</dt>
-                    <dd className="text-black/30 text-xs uppercase tracking-wider">
-                      {img.category}
-                    </dd>
-                    <dt className="sr-only">Título</dt>
-                    <dd className="text-black text-sm truncate">{img.title}</dd>
-                  </dl>
+                    <dl className="pt-3 space-y-0.5">
+                      <dt className="sr-only">Categoria</dt>
+                      <dd className="text-black/30 text-xs uppercase tracking-wider">
+                        {img.category}
+                      </dd>
+                      <dt className="sr-only">Título</dt>
+                      <dd className="text-black text-sm truncate">
+                        {img.title}
+                      </dd>
+                    </dl>
                   </li>
                 ))}
               </ul>
