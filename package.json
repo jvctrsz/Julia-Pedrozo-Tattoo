@@ -14,6 +14,7 @@
     "@prisma/client": "^5.22.0",
     "axios": "^1.16.0",
     "cloudinary": "^2.10.0",
+    "jose": "^6.2.3",
     "motion": "^12.38.0",
     "next": "16.1.7",
     "postcss": "^8.5.8",

@@ -12,7 +12,7 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  if (!isAuthenticated(req)) {
+  if (!(await isAuthenticated(req))) {
     return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
   }
 

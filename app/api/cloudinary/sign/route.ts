@@ -3,7 +3,7 @@ import { cloudinary } from "@/lib/cloudinary";
 import { isAuthenticated } from "@/lib/auth";
 
 export async function GET(req: NextRequest) {
-  if (!isAuthenticated(req)) {
+  if (!(await isAuthenticated(req))) {
     return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
   }
 

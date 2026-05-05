@@ -7,7 +7,7 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  if (!isAuthenticated(req)) {
+  if (!(await isAuthenticated(req))) {
     return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
   }
 
