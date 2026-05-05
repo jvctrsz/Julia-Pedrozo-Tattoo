@@ -27,7 +27,6 @@ export const WorkCard = ({
   const isFeatured = variant === "featured";
   return (
     <motion.li
-      role="button"
       tabIndex={0}
       aria-label={`Ver ${work.title} em tela cheia`}
       {...rest}

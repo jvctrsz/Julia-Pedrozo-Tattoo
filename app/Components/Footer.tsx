@@ -7,16 +7,16 @@ const Footer = () => {
   return (
     <footer className="bg-black text-white divide-y divide-white/10 ">
       <div className="grid md:grid-cols-3 gap-12 max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
-        <article>
+        <div>
           <h3 className="text-2xl mb-4">
             JULIA<span className="text-white/60">PEDROZO</span>
           </h3>
           <p className="text-white/60">
             Tatuadora especialista em Blackwork, Fine Line e outros estilos. Sinop - MT.
           </p>
-        </article>
+        </div>
 
-        <article>
+        <div>
           <h4 className="text-sm uppercase tracking-wider mb-4">
             Acesso Rápido
           </h4>
@@ -54,9 +54,9 @@ const Footer = () => {
               </Link>
             </li>
           </ul>
-        </article>
+        </div>
 
-        <article>
+        <div>
           <h4 className="text-sm uppercase tracking-wider mb-4">Contatos</h4>
           <ul className="flex gap-4" aria-label="Redes sociais">
             <li>
@@ -89,7 +89,7 @@ const Footer = () => {
               </a>
             </li>
           </ul>
-        </article>
+        </div>
       </div>
       <small className="block py-8 text-center text-white/40 text-sm">
         &copy; {new Date().getFullYear()} JULIA PEDROZO. Todos os direitos reservados.

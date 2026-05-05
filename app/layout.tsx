@@ -17,6 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://juliapedrozo-tattoo.vercel.app"),
   title: "Julia Pedrozo Tattoo",
   description:
     "Portfólio de Julia Pedrozo, tatuadora especialista em Fine Line, Blackwork e outros estilos em Sinop - MT. Agende sua sessão.",

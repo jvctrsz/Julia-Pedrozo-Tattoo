@@ -6,10 +6,7 @@ import { ButtonNav } from "@/app/Components";
 
 export const HeroMobile = () => {
   return (
-    <section
-      aria-label="Apresentação da Tatuadora"
-      className="lg:hidden py-24 bg-neutral-50"
-    >
+    <section aria-hidden="true" className="lg:hidden py-24 bg-neutral-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="grid gap-12 items-center">
           <motion.figure
@@ -40,12 +37,12 @@ export const HeroMobile = () => {
             <p className="text-black/40 text-sm uppercase tracking-[0.3em] mb-4">
               Tatuadora
             </p>
-            <h1
+            <h2
               className="text-4xl font-bold mb-4 text-black/90"
               style={{ fontFamily: "'Didot', serif" }}
             >
               Julia Pedrozo
-            </h1>
+            </h2>
             <p className="text-base text-black/65 mb-8 leading-relaxed">
               Especialista em Blackwork e Fine Line. Cada traço nascido com
               intenção, cada tatuagem uma história única na sua pele.
