@@ -2,6 +2,7 @@
 
 import { motion, type HTMLMotionProps } from "motion/react";
 import Image from "next/image";
+import { MagnifyingGlassPlusIcon } from "@heroicons/react/24/outline";
 import { classNames } from "@/src/miscellaneous";
 
 interface Work {
@@ -25,10 +26,13 @@ export const WorkCard = ({
   const isFeatured = variant === "featured";
   return (
     <motion.li
+      role="button"
+      tabIndex={0}
+      aria-label={`Ver ${work.title} em tela cheia`}
       {...rest}
       className={classNames(
-        "group relative overflow-hidden bg-black",
-        isFeatured ? "aspect-4/5" : "aspect-3/4 cursor-pointer",
+        "group relative overflow-hidden bg-black cursor-pointer",
+        isFeatured ? "aspect-4/5" : "aspect-3/4",
         className,
       )}
     >
@@ -44,7 +48,6 @@ export const WorkCard = ({
           )}
         />
         <figcaption
-          aria-hidden="true"
           className={classNames(
             "absolute inset-0 flex flex-col justify-end p-6 bg-linear-to-t opacity-0 group-hover:opacity-100 transition-opacity duration-300",
             isFeatured
@@ -63,6 +66,10 @@ export const WorkCard = ({
           >
             {work.title}
           </h3>
+
+          <div className="absolute top-4 right-4 flex items-center justify-center size-9 bg-white/10 border border-white/20 text-white backdrop-blur-sm">
+            <MagnifyingGlassPlusIcon className="size-4" />
+          </div>
         </figcaption>
       </figure>
     </motion.li>
