@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useMemo, useState } from "react";
+import useSWR from "swr";
 import { portfolioItems } from "@/src/Utils/mockData";
 import { classNames } from "@/src/miscellaneous";
 import { PortfolioGallery } from "./PortfolioGallery";
-import api from "@/src/lib/api";
 
 interface PortfolioItem {
   id: string | number;
@@ -26,35 +26,24 @@ const MAIN_CATEGORIES = ["Blackwork", "Fine Line"];
 
 export const PortfolioGrid = () => {
   const [activeFilter, setActiveFilter] = useState("Todos");
-  const [dbItems, setDbItems] = useState<PortfolioItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        const { data } = await api.get<DbImage[]>("/images");
+  const { data, isLoading } = useSWR<DbImage[]>("/images");
 
-        const mapped = data.map((img) => ({
-          id: img.id,
-          image: img.url,
-          title: img.title,
-          category: img.category,
-        }));
+  const dbItems: PortfolioItem[] = useMemo(
+    () =>
+      (data ?? []).map((img) => ({
+        id: img.id,
+        image: img.url,
+        title: img.title,
+        category: img.category,
+      })),
+    [data],
+  );
 
-        setDbItems(mapped);
-      } catch (error) {
-        console.error("Fallback para mocks ativado. Falha:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchImages();
-  }, []);
-
-  const allItems = useMemo(() => {
-    return [...portfolioItems, ...dbItems];
-  }, [dbItems]);
+  const allItems = useMemo(
+    () => [...portfolioItems, ...dbItems],
+    [dbItems],
+  );
 
   const filteredItems = useMemo(() => {
     if (activeFilter === "Todos") return allItems;

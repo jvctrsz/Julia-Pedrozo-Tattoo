@@ -7,4 +7,7 @@ const api = axios.create({
   },
 });
 
+export const fetcher = <T>(url: string): Promise<T> =>
+  api.get<T>(url).then((res) => res.data);
+
 export default api;

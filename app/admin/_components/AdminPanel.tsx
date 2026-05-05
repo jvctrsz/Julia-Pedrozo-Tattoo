@@ -1,8 +1,6 @@
 "use client";
 
 import {
-  useCallback,
-  useEffect,
   useRef,
   useState,
   ChangeEvent,
@@ -18,6 +16,7 @@ import {
 import { classNames } from "@/src/miscellaneous";
 import { optimizeImage } from "@/src/Utils/cloudinaryOptimization";
 import api from "@/src/lib/api";
+import useSWR from "swr";
 
 interface ImageRecord {
   id: string;
@@ -31,8 +30,7 @@ interface ImageRecord {
 const CATEGORIES = ["Blackwork", "Fine Line", "Floral", "Outros"];
 
 export default function AdminPanel() {
-  const [images, setImages] = useState<ImageRecord[]>([]);
-  const [loadingImages, setLoadingImages] = useState(true);
+  const { data: images = [], isLoading: loadingImages, mutate } = useSWR<ImageRecord[]>("/images");
 
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -43,17 +41,6 @@ export default function AdminPanel() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const fetchImages = useCallback(async () => {
-    setLoadingImages(true);
-    const { data } = await api.get<ImageRecord[]>("/images");
-    setImages(data);
-    setLoadingImages(false);
-  }, []);
-
-  useEffect(() => {
-    fetchImages();
-  }, [fetchImages]);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     setUploadError("");
@@ -121,7 +108,7 @@ export default function AdminPanel() {
       setTitle("");
       setCategory(CATEGORIES[0]);
       clearFile();
-      await fetchImages();
+      await mutate();
     } catch (err) {
       setUploadError(err instanceof Error ? err.message : "Erro desconhecido.");
     } finally {
@@ -132,7 +119,7 @@ export default function AdminPanel() {
   const handleDelete = async (id: string) => {
     setDeletingId(id);
     await api.delete(`/images/${id}`);
-    setImages((prev) => prev.filter((img) => img.id !== id));
+    await mutate();
     setDeletingId(null);
   };
 

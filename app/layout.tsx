@@ -5,6 +5,7 @@ import Navigation from "./Components/Navigation";
 import { ReactNode } from "react";
 import Footer from "./Components/Footer";
 import FloatingContact from "./Components/FloatingContact";
+import SWRProvider from "./Components/SWRProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,18 +30,20 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased `}
       >
-        <div className="min-h-screen bg-white">
-          <a
-            href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:bg-black focus:text-white focus:px-4 focus:py-2"
-          >
-            Ir para o conteúdo principal
-          </a>
-          <Navigation />
-          <main id="main-content">{children}</main>
-          <Footer />
-          <FloatingContact />
-        </div>
+        <SWRProvider>
+          <div className="min-h-screen bg-white">
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:bg-black focus:text-white focus:px-4 focus:py-2"
+            >
+              Ir para o conteúdo principal
+            </a>
+            <Navigation />
+            <main id="main-content">{children}</main>
+            <Footer />
+            <FloatingContact />
+          </div>
+        </SWRProvider>
       </body>
     </html>
   );
