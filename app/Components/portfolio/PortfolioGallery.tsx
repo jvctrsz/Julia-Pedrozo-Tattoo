@@ -15,11 +15,13 @@ interface PortfolioItem {
 interface PortfolioGalleryProps {
   filteredItems: PortfolioItem[];
   activeFilter: string;
+  isLoading?: boolean;
 }
 
 export const PortfolioGallery = ({
   filteredItems,
   activeFilter,
+  isLoading,
 }: PortfolioGalleryProps) => {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
@@ -48,10 +50,22 @@ export const PortfolioGallery = ({
                   onClick={() => setLightboxIndex(index)}
                 />
               ))}
+
+              {isLoading &&
+                Array.from({ length: 3 }).map((_, i) => (
+                  <motion.li
+                    key={`skeleton-${i}`}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="aspect-3/4 bg-black/5 animate-pulse"
+                    aria-hidden="true"
+                  />
+                ))}
             </motion.ul>
           </AnimatePresence>
 
-          {!filteredItems.length && (
+          {!filteredItems.length && !isLoading && (
             <p className="text-center text-black/40 py-24">
               Nenhum trabalho encontrado nesta categoria.
             </p>
