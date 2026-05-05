@@ -1,0 +1,21 @@
+import type { Metadata } from "next";
+import { cookies } from "next/headers";
+import LoginForm from "./_components/LoginForm";
+import AdminPanel from "./_components/AdminPanel";
+
+export const metadata: Metadata = {
+  title: "Admin — Julia Pedrozo Tattoo",
+  robots: { index: false, follow: false },
+};
+
+export default async function AdminPage() {
+  const cookieStore = await cookies();
+  const session = cookieStore.get("admin_session");
+  const isAuthenticated = session?.value === process.env.ADMIN_PASSWORD;
+
+  if (!isAuthenticated) {
+    return <LoginForm />;
+  }
+
+  return <AdminPanel />;
+}
