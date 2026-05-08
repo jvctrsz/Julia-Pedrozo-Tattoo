@@ -26,13 +26,40 @@ export const metadata: Metadata = {
   description:
     "Portfólio de Julia Pedrozo, tatuadora especialista em Fine Line, Blackwork e outros estilos em Sinop - MT. Agende sua sessão.",
   applicationName: "Julia Pedrozo Tattoo",
+  keywords: [
+    "tatuadora em Sinop",
+    "tattoo Sinop",
+    "fine line",
+    "blackwork",
+    "tatuagem feminina",
+    "Julia Pedrozo Tattoo",
+  ],
+  authors: [{ name: "Julia Pedrozo" }],
+  creator: "Julia Pedrozo",
+  publisher: "Julia Pedrozo Tattoo",
   openGraph: {
     title: "Julia Pedrozo Tattoo | Tatuadora em Sinop - MT",
-    description: "Portfólio de Julia Pedrozo, tatuadora especialista em Fine Line, Blackwork e outros estilos em Sinop - MT.",
+    description:
+      "Portfólio de Julia Pedrozo, tatuadora especialista em Fine Line, Blackwork e outros estilos em Sinop - MT.",
     url: "https://juliapedrozotattoo.com.br",
     siteName: "Julia Pedrozo Tattoo",
     locale: "pt_BR",
     type: "website",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Julia Pedrozo Tattoo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Julia Pedrozo Tattoo",
+    description:
+      "Tatuadora especialista em Fine Line e Blackwork em Sinop - MT.",
+    images: ["/og-image.jpg"],
   },
   alternates: {
     canonical: "https://juliapedrozotattoo.com.br",
