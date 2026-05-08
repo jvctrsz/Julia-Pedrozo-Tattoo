@@ -2,9 +2,9 @@
 
 import { useMemo, useState } from "react";
 import useSWR from "swr";
-import { portfolioItems } from "@/src/Utils/mockData";
 import { classNames } from "@/src/miscellaneous";
 import { PortfolioGallery } from "./PortfolioGallery";
+import { featuredWorks } from "@/src/Utils/mockData";
 
 interface PortfolioItem {
   id: string | number;
@@ -40,10 +40,7 @@ export const PortfolioGrid = () => {
     [data],
   );
 
-  const allItems = useMemo(
-    () => [...portfolioItems, ...dbItems],
-    [dbItems],
-  );
+  const allItems = useMemo(() => [...featuredWorks, ...dbItems], [dbItems]);
 
   const filteredItems = useMemo(() => {
     if (activeFilter === "Todos") return allItems;
