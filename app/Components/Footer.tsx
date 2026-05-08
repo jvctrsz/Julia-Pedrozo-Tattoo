@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { FaInstagram, FaWhatsapp } from "react-icons/fa";
-import { MdEmail } from "react-icons/md";
-import { EMAIL, INSTAGRAM_URL, WHATSAPP_URL } from "@/src/config";
+import { INSTAGRAM_URL, WHATSAPP_URL } from "@/src/config";
 
 const Footer = () => {
   return (
@@ -70,15 +69,7 @@ const Footer = () => {
                 <FaInstagram />
               </a>
             </li>
-            <li>
-              <a
-                href={`mailto:${EMAIL}`}
-                className="text-white/60 hover:text-white transition-colors hover:scale-110"
-                aria-label="Enviar email para Julia Pedrozo"
-              >
-                <MdEmail />
-              </a>
-            </li>
+
             <li>
               <a
                 href={WHATSAPP_URL}

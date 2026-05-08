@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  EMAIL,
   INSTAGRAM_HANDLE,
   INSTAGRAM_URL,
   WHATSAPP_URL,
@@ -9,7 +8,7 @@ import {
 import { motion } from "motion/react";
 import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 import { FaMapLocation } from "react-icons/fa6";
-import { MdEmail } from "react-icons/md";
+
 
 const contactItems = [
   {
@@ -21,18 +20,7 @@ const contactItems = [
       </a>
     ),
   },
-  {
-    icon: <MdEmail size={20} className="text-white" />,
-    label: "Email",
-    content: (
-      <a
-        href={`mailto:${EMAIL}`}
-        className="text-lg text-black/70 hover:text-black"
-      >
-        {EMAIL}
-      </a>
-    ),
-  },
+
   {
     icon: <FaInstagram size={20} className="text-white" />,
     label: "Instagram",

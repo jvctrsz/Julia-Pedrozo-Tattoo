@@ -4,7 +4,6 @@ export const WHATSAPP_MESSAGE = encodeURIComponent(
 );
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_PHONE}?text=${WHATSAPP_MESSAGE}`;
 
-export const EMAIL = "jpyoarttattoo@gmail.com";
 
 export const INSTAGRAM_HANDLE = "@jpyoarttattoo";
 export const INSTAGRAM_URL = "https://www.instagram.com/jpyoarttattoo/";

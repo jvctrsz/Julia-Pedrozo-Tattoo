@@ -8,7 +8,7 @@ export const featuredWorks = [
   {
     id: 2,
     image: "/images/peonia.webp",
-    title: "Peonia",
+    title: "Peônia",
     category: "Floral",
   },
   {
