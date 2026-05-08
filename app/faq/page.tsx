@@ -26,10 +26,10 @@ export const metadata: Metadata = {
 
 export default function FaqPage() {
   return (
-    <main className="bg-white">
+    <div className="bg-white">
       <PageHeader page="FAQ" title="Dúvidas" subTitle="Frequentes" />
       <FAQList />
       <FAQCta />
-    </main>
+    </div>
   );
 }

@@ -29,11 +29,11 @@ export const metadata: Metadata = {
 
 export default function About() {
   return (
-    <main>
+    <>
       <PageHeader page="Sobre" title="Minha" subTitle="História" />
       <AboutTrajectorySection />
       <AboutSpecializationsSection />
       <AboutStudioSection />
-    </main>
+    </>
   );
 }

@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 
 export default function Contacts() {
   return (
-    <main>
+    <>
       <PageHeader title="Vamos Criar" subTitle="Juntos" page="Contatos" />
 
       <section aria-label="Informações de contato" className="py-24 lg:py-32">
@@ -38,6 +38,6 @@ export default function Contacts() {
       </section>
 
       <ContactStudioPhoto />
-    </main>
+    </>
   );
 }

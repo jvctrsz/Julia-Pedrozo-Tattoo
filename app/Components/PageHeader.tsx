@@ -12,7 +12,7 @@ const PageHeader = ({ page, subTitle, title }: PageHeaderProps) => {
   return (
     <section
       aria-label={`Cabeçalho — ${page}`}
-      className="bg-neutral-50 pt-28 pb-12 lg:pt-36 lg:pb-16"
+      className="bg-neutral-50 pt-36 pb-12 lg:pt-40 lg:pb-16"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div

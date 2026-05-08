@@ -18,9 +18,9 @@ export const metadata: Metadata = {
 
 export default function Portfolio() {
   return (
-    <main>
+    <>
       <PageHeader page="Portfólio" title="Minha" subTitle="Arte" />
       <PortfolioGrid />
-    </main>
+    </>
   );
 }
