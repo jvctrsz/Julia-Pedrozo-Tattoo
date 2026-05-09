@@ -6,6 +6,8 @@ import { ReactNode } from "react";
 import Footer from "./Components/Footer";
 import FloatingContact from "./Components/FloatingContact";
 import SWRProvider from "./Components/SWRProvider";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -84,6 +86,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <main id="main-content">{children}</main>
             <Footer />
             <FloatingContact />
+            <SpeedInsights />
+            <Analytics />
             <script
               type="application/ld+json"
               dangerouslySetInnerHTML={{
