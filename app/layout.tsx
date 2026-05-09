@@ -8,6 +8,7 @@ import FloatingContact from "./Components/FloatingContact";
 import SWRProvider from "./Components/SWRProvider";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
+import { INSTAGRAM_URL, WHATSAPP_PHONE } from "@/src/config";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -93,10 +94,18 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               dangerouslySetInnerHTML={{
                 __html: JSON.stringify({
                   "@context": "https://schema.org",
-                  "@type": "WebSite",
+                  "@type": "TattooParlor",
                   name: "Julia Pedrozo Tattoo",
-                  alternateName: ["Julia Pedrozo", "JP Tattoo"],
-                  url: "https://juliapedrozotattoo.com.br/",
+                  image: "https://juliapedrozotattoo.com.br/og-image.jpg",
+                  url: "https://juliapedrozotattoo.com.br",
+                  telephone: `+${WHATSAPP_PHONE}`,
+                  address: {
+                    "@type": "PostalAddress",
+                    addressLocality: "Sinop",
+                    addressRegion: "MT",
+                    addressCountry: "BR",
+                  },
+                  sameAs: [INSTAGRAM_URL],
                 }),
               }}
             />
