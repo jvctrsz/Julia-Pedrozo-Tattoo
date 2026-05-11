@@ -20,7 +20,7 @@ interface DbImage {
   category: string;
 }
 
-const categories = ["Todos", "Blackwork", "Fine Line", "Outros"];
+const categories = ["Todos", "Blackwork", "Fine Line", "Floral", "Outros"];
 
 const MAIN_CATEGORIES = ["Blackwork", "Fine Line"];
 
