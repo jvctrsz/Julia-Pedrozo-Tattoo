@@ -18,7 +18,7 @@ const geistSans = Geist({
 export const metadata: Metadata = {
   metadataBase: new URL("https://juliapedrozotattoo.com.br"),
   title: {
-    default: "Julia Pedrozo Tattoo | Tatuadora em Sinop - MT",
+    default: "Julia Pedrozo Tattoo | Tatuadora em Sinop",
     template: "%s | Julia Pedrozo Tattoo",
   },
   description:
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   creator: "Julia Pedrozo",
   publisher: "Julia Pedrozo Tattoo",
   openGraph: {
-    title: "Julia Pedrozo Tattoo | Tatuadora em Sinop - MT",
+    title: "Julia Pedrozo Tattoo | Tatuadora em Sinop",
     description:
       "Portfólio de Julia Pedrozo, tatuadora especialista em Fine Line, Blackwork e outros estilos em Sinop - MT.",
     url: "https://juliapedrozotattoo.com.br",
@@ -84,6 +84,18 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <FloatingContact />
             <SpeedInsights />
             <Analytics />
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify({
+                  "@context": "https://schema.org",
+                  "@type": "WebSite",
+                  name: "jpyoarttattoo",
+                  alternateName: "Julia Pedrozo Tattoo",
+                  url: "https://juliapedrozotattoo.com.br",
+                }),
+              }}
+            />
             <script
               type="application/ld+json"
               dangerouslySetInnerHTML={{
