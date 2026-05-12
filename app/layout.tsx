@@ -18,7 +18,7 @@ const geistSans = Geist({
 export const metadata: Metadata = {
   metadataBase: new URL("https://juliapedrozotattoo.com.br"),
   title: {
-    default: "Julia Pedrozo Tattoo | Tatuadora em Sinop",
+    default: "Julia Pedrozo Tattoo | Tatuadora em Sinop - MT",
     template: "%s | Julia Pedrozo Tattoo",
   },
   description:
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   creator: "Julia Pedrozo",
   publisher: "Julia Pedrozo Tattoo",
   openGraph: {
-    title: "Julia Pedrozo Tattoo | Tatuadora em Sinop",
+    title: "Julia Pedrozo Tattoo | Tatuadora em Sinop - MT",
     description:
       "Portfólio de Julia Pedrozo, tatuadora especialista em Fine Line, Blackwork e outros estilos em Sinop - MT.",
     url: "https://juliapedrozotattoo.com.br",

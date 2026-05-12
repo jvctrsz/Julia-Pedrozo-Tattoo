@@ -22,7 +22,7 @@ interface DbImage {
 
 const categories = ["Todos", "Blackwork", "Fine Line", "Floral", "Outros"];
 
-const MAIN_CATEGORIES = ["Blackwork", "Fine Line"];
+const MAIN_CATEGORIES = ["Blackwork", "Fine Line", "Floral"];
 
 export const PortfolioGrid = () => {
   const [activeFilter, setActiveFilter] = useState("Todos");
