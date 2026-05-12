@@ -52,13 +52,13 @@ export const PortfolioGallery = ({
               ))}
 
               {isLoading &&
-                Array.from({ length: 3 }).map((_, i) => (
+                Array.from({ length: 6 }).map((_, i) => (
                   <motion.li
                     key={`skeleton-${i}`}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="aspect-3/4 bg-black/5 animate-pulse"
+                    className="aspect-3/4 shimmer rounded-sm"
                     aria-hidden="true"
                   />
                 ))}

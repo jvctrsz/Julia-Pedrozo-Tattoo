@@ -1,10 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { motion, type HTMLMotionProps } from "motion/react";
 import Image from "next/image";
 import { MagnifyingGlassPlusIcon } from "@heroicons/react/24/outline";
 import { classNames } from "@/src/miscellaneous";
 import { optimizeImage } from "@/src/Utils/cloudinaryOptimization";
+import { LOCAL_BLUR_DATA_URL } from "@/src/Utils/imageUtils";
 
 interface Work {
   id: string | number;
@@ -25,27 +27,49 @@ export const WorkCard = ({
   ...rest
 }: WorkCardProps) => {
   const isFeatured = variant === "featured";
+  const isCloudinary = work.image.includes("res.cloudinary.com");
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  const src = optimizeImage(work.image, isFeatured ? 1200 : 800, "thumb");
+
   return (
     <motion.li
       tabIndex={0}
       aria-label={`Ver ${work.title} em tela cheia`}
       {...rest}
       className={classNames(
-        "group relative overflow-hidden bg-black cursor-pointer",
+        "group relative overflow-hidden cursor-pointer",
         isFeatured ? "aspect-4/5" : "aspect-3/4",
         className,
       )}
     >
+      <div
+        aria-hidden="true"
+        className={classNames(
+          "absolute inset-0 transition-opacity duration-500",
+          isLoaded ? "opacity-0 pointer-events-none" : "opacity-100 shimmer",
+        )}
+      />
+
       <figure className="w-full h-full m-0 p-0 relative">
         <Image
-          src={optimizeImage(work.image, isFeatured ? 1200 : 800)}
+          src={src}
           alt={`${work.title} — ${work.category} por Julia Pedrozo`}
           fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          sizes={
+            isFeatured
+              ? "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          }
           className={classNames(
-            "object-cover transition-transform duration-700",
+            "object-cover transition-all duration-700",
+            isLoaded ? "opacity-100" : "opacity-0",
             isFeatured ? "group-hover:scale-105" : "group-hover:scale-110",
           )}
+          placeholder={!isCloudinary ? "blur" : undefined}
+          blurDataURL={!isCloudinary ? LOCAL_BLUR_DATA_URL : undefined}
+          onLoad={() => setIsLoaded(true)}
+          loading="lazy"
         />
         <figcaption
           className={classNames(

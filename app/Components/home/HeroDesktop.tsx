@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion } from "motion/react";
 import { ButtonNav } from "@/app/Components";
+import { LOCAL_BLUR_DATA_URL } from "@/src/Utils/imageUtils";
 
 export const HeroDesktop = () => {
   return (
@@ -23,6 +24,8 @@ export const HeroDesktop = () => {
           sizes="58vw"
           className="object-cover grayscale-20"
           priority
+          placeholder="blur"
+          blurDataURL={LOCAL_BLUR_DATA_URL}
         />
         <div className="absolute inset-0 bg-linear-to-r from-neutral-50 via-neutral-50/30 to-transparent" />
       </motion.div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState, useRef } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 import {
@@ -9,7 +9,8 @@ import {
   ChevronRightIcon,
 } from "@heroicons/react/24/outline";
 import { classNames } from "@/src/miscellaneous";
-import { optimizeImage } from "@/src/Utils/cloudinaryOptimization";
+import { optimizeImage, getCloudinaryBlurURL } from "@/src/Utils/cloudinaryOptimization";
+import { LOCAL_BLUR_DATA_URL, preloadImage } from "@/src/Utils/imageUtils";
 
 interface LightboxItem {
   id: string | number;
@@ -33,6 +34,81 @@ export const ImageLightbox = ({
 }: ImageLightboxProps) => {
   const isOpen = currentIndex !== null;
   const total = items.length;
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const prevIndexRef = useRef<number | null>(null);
+
+  // Refs para gerenciamento de foco
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const triggerRef = useRef<Element | null>(null);
+
+  // Ao abrir: salva o elemento que tinha foco e move o foco para o botão fechar
+  // Ao fechar: devolve o foco ao elemento que abriu o modal
+  useEffect(() => {
+    if (isOpen) {
+      triggerRef.current = document.activeElement;
+      // Aguarda a animação de entrada antes de mover o foco
+      const id = setTimeout(() => closeButtonRef.current?.focus(), 50);
+      return () => clearTimeout(id);
+    } else {
+      if (triggerRef.current instanceof HTMLElement) {
+        triggerRef.current.focus();
+        triggerRef.current = null;
+      }
+    }
+  }, [isOpen]);
+
+  // Trap de foco: Tab e Shift+Tab circulam apenas dentro do modal
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleFocusTrap = (e: KeyboardEvent) => {
+      if (e.key !== "Tab") return;
+
+      const dialog = closeButtonRef.current?.closest('[role="dialog"]');
+      if (!dialog) return;
+
+      const focusable = Array.from(
+        dialog.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter((el) => !el.hasAttribute("disabled"));
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last?.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first?.focus();
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleFocusTrap);
+    return () => document.removeEventListener("keydown", handleFocusTrap);
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (currentIndex !== prevIndexRef.current) {
+      setIsImageLoaded(false);
+      prevIndexRef.current = currentIndex;
+    }
+  }, [currentIndex]);
+
+  useEffect(() => {
+    if (currentIndex === null || total === 0) return;
+
+    const prevIndex = (currentIndex - 1 + total) % total;
+    const nextIndex = (currentIndex + 1) % total;
+
+    preloadImage(optimizeImage(items[prevIndex].image, 1600, "full")).catch(() => {});
+    preloadImage(optimizeImage(items[nextIndex].image, 1600, "full")).catch(() => {});
+  }, [currentIndex, items, total]);
 
   const handlePrev = useCallback(() => {
     if (currentIndex === null) return;
@@ -63,6 +139,7 @@ export const ImageLightbox = ({
   }, [isOpen, handlePrev, handleNext, onClose]);
 
   const current = currentIndex !== null ? items[currentIndex] : null;
+  const isCloudinary = current?.image.includes("res.cloudinary.com");
 
   return (
     <AnimatePresence>
@@ -72,15 +149,16 @@ export const ImageLightbox = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.25 }}
           className="fixed inset-0 z-[200] flex items-center justify-center bg-black/95"
           onClick={onClose}
           role="dialog"
           aria-modal="true"
           aria-label={`Visualizando: ${current.title}`}
         >
-          {/* Close button */}
           <button
+            ref={closeButtonRef}
+            type="button"
             onClick={onClose}
             className="absolute top-5 right-5 z-10 flex items-center gap-2 text-white/70 hover:text-white transition-colors text-xs uppercase tracking-widest cursor-pointer"
             aria-label="Fechar visualização"
@@ -98,10 +176,8 @@ export const ImageLightbox = ({
           </p>
 
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handlePrev();
-            }}
+            type="button"
+            onClick={(e) => { e.stopPropagation(); handlePrev(); }}
             className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center size-11 border border-white/20 text-white/70 hover:text-white hover:border-white/60 transition-all cursor-pointer"
             aria-label="Imagem anterior"
           >
@@ -109,10 +185,8 @@ export const ImageLightbox = ({
           </button>
 
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleNext();
-            }}
+            type="button"
+            onClick={(e) => { e.stopPropagation(); handleNext(); }}
             className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center size-11 border border-white/20 text-white/70 hover:text-white hover:border-white/60 transition-all cursor-pointer"
             aria-label="Próxima imagem"
           >
@@ -127,15 +201,36 @@ export const ImageLightbox = ({
               className="relative w-full max-w-4xl mx-auto"
               style={{ maxHeight: "calc(100vh - 140px)" }}
             >
+              <div
+                aria-hidden="true"
+                className={classNames(
+                  "absolute inset-0 transition-opacity duration-500",
+                  isImageLoaded
+                    ? "opacity-0 pointer-events-none"
+                    : "opacity-100 shimmer-dark",
+                )}
+              />
+
               <Image
-                src={optimizeImage(current.image, 1600)}
+                key={currentIndex}
+                src={optimizeImage(current.image, 1600, "full")}
                 alt={`${current.title} — ${current.category} por Julia Pedrozo`}
                 width={1080}
                 height={1350}
-                className="w-full h-auto object-contain"
+                className={classNames(
+                  "w-full h-auto object-contain transition-opacity duration-500",
+                  isImageLoaded ? "opacity-100" : "opacity-0",
+                )}
                 style={{ maxHeight: "calc(100vh - 140px)" }}
                 sizes="(max-width: 768px) 100vw, 80vw"
                 priority
+                placeholder="blur"
+                blurDataURL={
+                  isCloudinary
+                    ? getCloudinaryBlurURL(current.image)
+                    : LOCAL_BLUR_DATA_URL
+                }
+                onLoad={() => setIsImageLoaded(true)}
               />
             </div>
 
@@ -156,10 +251,8 @@ export const ImageLightbox = ({
             {items.map((_, i) => (
               <button
                 key={i}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onNavigate(i);
-                }}
+                type="button"
+                onClick={(e) => { e.stopPropagation(); onNavigate(i); }}
                 aria-label={`Ir para imagem ${i + 1}`}
                 aria-current={i === currentIndex ? "true" : undefined}
                 className={classNames(

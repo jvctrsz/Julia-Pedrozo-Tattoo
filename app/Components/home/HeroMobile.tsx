@@ -3,10 +3,11 @@
 import Image from "next/image";
 import { motion } from "motion/react";
 import { ButtonNav } from "@/app/Components";
+import { LOCAL_BLUR_DATA_URL } from "@/src/Utils/imageUtils";
 
 export const HeroMobile = () => {
   return (
-    <section aria-hidden="true" className="lg:hidden py-24 bg-neutral-50">
+    <section aria-label="Apresentação da Tatuadora" className="lg:hidden py-24 bg-neutral-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="grid gap-12 items-center">
           <motion.figure
@@ -24,6 +25,8 @@ export const HeroMobile = () => {
                 sizes="(max-width: 640px) calc(100vw - 2rem), calc(100vw - 3rem)"
                 className="object-cover"
                 priority
+                placeholder="blur"
+                blurDataURL={LOCAL_BLUR_DATA_URL}
               />
             </div>
           </motion.figure>
