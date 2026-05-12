@@ -3,6 +3,7 @@
 import { motion } from "motion/react";
 import SectionTitle from "../SectionTitle";
 import Image from "next/image";
+import tattooArt from "@/public/images/tattoo-art.webp";
 
 export const AboutStudioSection = () => {
   return (
@@ -10,8 +11,8 @@ export const AboutStudioSection = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
@@ -26,18 +27,19 @@ export const AboutStudioSection = () => {
           </motion.div>
 
           <motion.figure
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
             className="relative aspect-4/3 overflow-hidden m-0"
           >
             <Image
-              src="/images/tattoo-art.webp"
+              src={tattooArt}
               alt="Studio de tatuagem de Julia Pedrozo em Sinop, MT"
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"
+              placeholder="blur"
             />
           </motion.figure>
         </div>

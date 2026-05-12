@@ -8,8 +8,8 @@ import SectionTitle from "../SectionTitle";
 const ContactWhatsAppCTA = () => {
   return (
     <motion.div
-      initial={{ opacity: 0, x: 30 }}
-      whileInView={{ opacity: 1, x: 0 }}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
       className="flex flex-col gap-8"

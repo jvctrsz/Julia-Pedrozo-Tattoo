@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import Image from "next/image";
+import tattooArt from "@/public/images/tattoo-art.webp";
 
 const ContactStudioPhoto = () => {
   return (
@@ -14,11 +15,12 @@ const ContactStudioPhoto = () => {
         className="relative aspect-21/9 max-w-7xl mx-auto bg-neutral-200 overflow-hidden m-0"
       >
         <Image
-          src="/images/tattoo-art.webp"
+          src={tattooArt}
           alt="Studio de tatuagem de Julia Pedrozo em Sinop, MT"
           fill
           sizes="100vw"
           className="object-cover"
+          placeholder="blur"
         />
       </motion.figure>
     </section>

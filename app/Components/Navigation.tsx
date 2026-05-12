@@ -22,13 +22,13 @@ const Navigation = () => {
   return (
     <nav
       className={classNames(
-        "fixed top-0 left-0 right-0 z-50 transition-colors duration-300 transform-gpu",
-        "bg-black/90 backdrop-blur-sm py-4",
+        "fixed top-0 left-0 right-0 z-50 transition-colors duration-300",
+        "bg-black/90 backdrop-blur-sm",
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center">
-          <Link href="/" className="text-2xl tracking-tight uppercase">
+        <div className="flex h-18 justify-between items-center">
+          <Link href="/" className="text-2xl leading-none uppercase">
             <span className="text-white">Julia</span>
             <span className="text-white/60">Pedrozo</span>
           </Link>
@@ -54,7 +54,7 @@ const Navigation = () => {
 
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-white p-2"
+            className="md:hidden inline-flex size-10 items-center justify-center text-white"
             aria-label="Menu de navegação"
             aria-expanded={isOpen}
             aria-controls="mobile-menu"
@@ -73,12 +73,9 @@ const Navigation = () => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden overflow-hidden"
+              className="md:hidden overflow-hidden border-t border-white/10"
             >
-              <ul
-                id="mobile-menu"
-                className="flex flex-col gap-4 pt-6 pb-4"
-              >
+              <ul id="mobile-menu" className="flex flex-col gap-4 pt-6 pb-4">
                 {navLinks.map((link) => (
                   <li key={link.path}>
                     <Link

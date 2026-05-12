@@ -16,7 +16,7 @@ const PageHeader = ({ page, subTitle, title }: PageHeaderProps) => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
           style={{ fontFamily: "'Didot', serif" }}
@@ -32,7 +32,7 @@ const PageHeader = ({ page, subTitle, title }: PageHeaderProps) => {
             className="font-bold leading-none text-black/90"
             style={{
               fontSize: "clamp(2.5rem, 5vw, 5rem)",
-              letterSpacing: "-0.03em",
+              letterSpacing: 0,
             }}
           >
             {title} <span className="font-light text-black/30">{subTitle}</span>

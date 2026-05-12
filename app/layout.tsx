@@ -73,10 +73,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="pt-br">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans overflow-x-hidden`}
       >
         <SWRProvider>
-          <div className="min-h-screen bg-white">
+          <div className="min-h-screen bg-white overflow-x-hidden">
             <a
               href="#main-content"
               className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:bg-black focus:text-white focus:px-4 focus:py-2"

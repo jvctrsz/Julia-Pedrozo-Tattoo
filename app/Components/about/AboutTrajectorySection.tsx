@@ -3,6 +3,7 @@
 import { motion } from "motion/react";
 import SectionTitle from "../SectionTitle";
 import Image from "next/image";
+import tattooPrincipal from "@/public/images/tattoo-principal.webp";
 
 export const AboutTrajectorySection = () => {
   return (
@@ -10,25 +11,26 @@ export const AboutTrajectorySection = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <motion.figure
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
             className="relative aspect-3/4 overflow-hidden m-0"
           >
             <Image
-              src="/images/tattoo-principal.webp"
+              src={tattooPrincipal}
               alt="Julia Pedrozo - Tatuadora em Sinop, MT"
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"
+              placeholder="blur"
               priority
             />
           </motion.figure>
 
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
