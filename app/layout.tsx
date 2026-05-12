@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist } from "next/font/google";
 import "./globals.css";
 import Navigation from "./Components/Navigation";
 import { ReactNode } from "react";
@@ -12,11 +12,6 @@ import { INSTAGRAM_URL, WHATSAPP_PHONE } from "@/src/config";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
@@ -73,7 +68,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="pt-br">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans overflow-x-hidden`}
+        className={`${geistSans.variable} antialiased font-sans overflow-x-hidden`}
       >
         <SWRProvider>
           <div className="min-h-screen bg-white overflow-x-hidden">
