@@ -10,7 +10,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { classNames } from "@/src/miscellaneous";
 import { optimizeImage, getCloudinaryBlurURL } from "@/src/Utils/cloudinaryOptimization";
-import { LOCAL_BLUR_DATA_URL, preloadImage } from "@/src/Utils/imageUtils";
+import { LOCAL_BLUR_DATA_URL, preloadImage, getNextImageURL } from "@/src/Utils/imageUtils";
 
 interface LightboxItem {
   id: string | number;
@@ -37,16 +37,12 @@ export const ImageLightbox = ({
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const prevIndexRef = useRef<number | null>(null);
 
-  // Refs para gerenciamento de foco
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const triggerRef = useRef<Element | null>(null);
 
-  // Ao abrir: salva o elemento que tinha foco e move o foco para o botão fechar
-  // Ao fechar: devolve o foco ao elemento que abriu o modal
   useEffect(() => {
     if (isOpen) {
       triggerRef.current = document.activeElement;
-      // Aguarda a animação de entrada antes de mover o foco
       const id = setTimeout(() => closeButtonRef.current?.focus(), 50);
       return () => clearTimeout(id);
     } else {
@@ -57,7 +53,6 @@ export const ImageLightbox = ({
     }
   }, [isOpen]);
 
-  // Trap de foco: Tab e Shift+Tab circulam apenas dentro do modal
   useEffect(() => {
     if (!isOpen) return;
 
@@ -106,8 +101,16 @@ export const ImageLightbox = ({
     const prevIndex = (currentIndex - 1 + total) % total;
     const nextIndex = (currentIndex + 1) % total;
 
-    preloadImage(optimizeImage(items[prevIndex].image, 1600, "full")).catch(() => {});
-    preloadImage(optimizeImage(items[nextIndex].image, 1600, "full")).catch(() => {});
+    const preload = (item: LightboxItem) => {
+      if (item.image.includes("res.cloudinary.com")) {
+        preloadImage(optimizeImage(item.image, 1200, "full")).catch(() => {});
+      } else {
+        preloadImage(getNextImageURL(item.image, 1200)).catch(() => {});
+      }
+    };
+
+    preload(items[prevIndex]);
+    preload(items[nextIndex]);
   }, [currentIndex, items, total]);
 
   const handlePrev = useCallback(() => {
@@ -213,7 +216,7 @@ export const ImageLightbox = ({
 
               <Image
                 key={currentIndex}
-                src={optimizeImage(current.image, 1600, "full")}
+                src={optimizeImage(current.image, 1200, "full")}
                 alt={`${current.title} — ${current.category} por Julia Pedrozo`}
                 width={1080}
                 height={1350}
@@ -222,7 +225,7 @@ export const ImageLightbox = ({
                   isImageLoaded ? "opacity-100" : "opacity-0",
                 )}
                 style={{ maxHeight: "calc(100vh - 140px)" }}
-                sizes="(max-width: 768px) 100vw, 80vw"
+                sizes="(max-width: 768px) 100vw, 1200px"
                 priority
                 placeholder="blur"
                 blurDataURL={

@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { motion, type HTMLMotionProps } from "motion/react";
 import Image from "next/image";
 import { MagnifyingGlassPlusIcon } from "@heroicons/react/24/outline";
 import { classNames } from "@/src/miscellaneous";
 import { optimizeImage } from "@/src/Utils/cloudinaryOptimization";
-import { LOCAL_BLUR_DATA_URL } from "@/src/Utils/imageUtils";
+import { LOCAL_BLUR_DATA_URL, preloadImage, getNextImageURL } from "@/src/Utils/imageUtils";
 
 interface Work {
   id: string | number;
@@ -32,6 +32,14 @@ export const WorkCard = ({
 
   const src = optimizeImage(work.image, isFeatured ? 1200 : 800, "thumb");
 
+  const handlePreload = useCallback(() => {
+    if (isCloudinary) {
+      preloadImage(optimizeImage(work.image, 1200, "full")).catch(() => {});
+    } else {
+      preloadImage(getNextImageURL(work.image, 1200)).catch(() => {});
+    }
+  }, [work.image, isCloudinary]);
+
   return (
     <motion.li
       tabIndex={0}
@@ -42,6 +50,8 @@ export const WorkCard = ({
         isFeatured ? "aspect-4/5" : "aspect-3/4",
         className,
       )}
+      onMouseEnter={handlePreload}
+      onTouchStart={handlePreload}
     >
       <div
         aria-hidden="true"

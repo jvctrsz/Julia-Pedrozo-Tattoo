@@ -13,3 +13,7 @@ export function preloadImage(url: string): Promise<void> {
     img.src = url;
   });
 }
+
+export function getNextImageURL(src: string, width: number, quality = 75): string {
+  return `/_next/image?url=${encodeURIComponent(src)}&w=${width}&q=${quality}`;
+}
