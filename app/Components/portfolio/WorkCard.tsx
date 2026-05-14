@@ -33,11 +33,8 @@ export const WorkCard = ({
   const src = optimizeImage(work.image, isFeatured ? 1200 : 800, "thumb");
 
   const handlePreload = useCallback(() => {
-    if (isCloudinary) {
-      preloadImage(optimizeImage(work.image, 1200, "full")).catch(() => {});
-    } else {
-      preloadImage(getNextImageURL(work.image, 1200)).catch(() => {});
-    }
+    const src = isCloudinary ? optimizeImage(work.image, 1200, "full") : work.image;
+    preloadImage(getNextImageURL(src, 1200)).catch(() => {});
   }, [work.image, isCloudinary]);
 
   return (

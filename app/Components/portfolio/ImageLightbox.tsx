@@ -102,11 +102,9 @@ export const ImageLightbox = ({
     const nextIndex = (currentIndex + 1) % total;
 
     const preload = (item: LightboxItem) => {
-      if (item.image.includes("res.cloudinary.com")) {
-        preloadImage(optimizeImage(item.image, 1200, "full")).catch(() => {});
-      } else {
-        preloadImage(getNextImageURL(item.image, 1200)).catch(() => {});
-      }
+      const isCloud = item.image.includes("res.cloudinary.com");
+      const src = isCloud ? optimizeImage(item.image, 1200, "full") : item.image;
+      preloadImage(getNextImageURL(src, 1200)).catch(() => {});
     };
 
     preload(items[prevIndex]);
