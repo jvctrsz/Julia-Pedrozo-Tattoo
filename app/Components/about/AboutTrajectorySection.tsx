@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import SectionTitle from "../SectionTitle";
 import Image from "next/image";
 import tattooPrincipal from "@/public/images/tattoo-principal.webp";
+import { classNames } from "@/src/miscellaneous";
 
 export const AboutTrajectorySection = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -20,7 +21,10 @@ export const AboutTrajectorySection = () => {
             className="relative aspect-3/4 overflow-hidden m-0"
           >
             <div
-              className={`absolute inset-0 z-10 transition-opacity duration-700 shimmer ${isLoaded ? "opacity-0 pointer-events-none" : "opacity-100"}`}
+              className={classNames(
+                "absolute inset-0 z-10 transition-opacity duration-700 shimmer",
+                isLoaded ? "opacity-0 pointer-events-none" : "opacity-100",
+              )}
               aria-hidden="true"
             />
             <Image
@@ -28,7 +32,10 @@ export const AboutTrajectorySection = () => {
               alt="Julia Pedrozo - Tatuadora em Sinop, MT"
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
-              className={`object-cover transition-opacity duration-700 ${isLoaded ? "opacity-100" : "opacity-0"}`}
+              className={classNames(
+                "object-cover transition-opacity duration-700",
+                isLoaded ? "opacity-100" : "opacity-0",
+              )}
               placeholder="blur"
               priority
               onLoad={() => setIsLoaded(true)}

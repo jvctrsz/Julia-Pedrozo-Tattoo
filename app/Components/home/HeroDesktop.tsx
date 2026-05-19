@@ -5,6 +5,7 @@ import { useState } from "react";
 import { motion } from "motion/react";
 import { ButtonNav } from "@/app/Components";
 import { LOCAL_BLUR_DATA_URL } from "@/src/Utils/imageUtils";
+import { classNames } from "@/src/miscellaneous";
 
 export const HeroDesktop = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -20,7 +21,10 @@ export const HeroDesktop = () => {
         className="absolute right-0 top-0 w-[58%] h-full"
       >
         <div
-          className={`absolute inset-0 z-10 transition-opacity duration-700 shimmer ${isLoaded ? "opacity-0 pointer-events-none" : "opacity-100"}`}
+          className={classNames(
+            "absolute inset-0 z-10 transition-opacity duration-700 shimmer",
+            isLoaded ? "opacity-0 pointer-events-none" : "opacity-100",
+          )}
           aria-hidden="true"
         />
         <Image
@@ -28,7 +32,10 @@ export const HeroDesktop = () => {
           alt="Julia Pedrozo - Tatuadora em Sinop, MT"
           fill
           sizes="(max-width: 1280px) 58vw, 1100px"
-          className={`object-cover grayscale-20 transition-opacity duration-700 ${isLoaded ? "opacity-100" : "opacity-0"}`}
+          className={classNames(
+            "object-cover grayscale-20 transition-opacity duration-700",
+            isLoaded ? "opacity-100" : "opacity-0",
+          )}
           priority
           placeholder="blur"
           blurDataURL={LOCAL_BLUR_DATA_URL}
