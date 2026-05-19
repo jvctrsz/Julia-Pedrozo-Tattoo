@@ -1,11 +1,13 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
 import { motion } from "motion/react";
 import { ButtonNav } from "@/app/Components";
 import { LOCAL_BLUR_DATA_URL } from "@/src/Utils/imageUtils";
 
 export const HeroDesktop = () => {
+  const [isLoaded, setIsLoaded] = useState(false);
   return (
     <section
       aria-label="Apresentação da Tatuadora"
@@ -17,17 +19,22 @@ export const HeroDesktop = () => {
         transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
         className="absolute right-0 top-0 w-[58%] h-full"
       >
+        <div
+          className={`absolute inset-0 z-10 transition-opacity duration-700 shimmer ${isLoaded ? "opacity-0 pointer-events-none" : "opacity-100"}`}
+          aria-hidden="true"
+        />
         <Image
           src="/images/tattoo-principal.webp"
           alt="Julia Pedrozo - Tatuadora em Sinop, MT"
           fill
-          sizes="58vw"
-          className="object-cover grayscale-20"
+          sizes="(max-width: 1280px) 58vw, 1100px"
+          className={`object-cover grayscale-20 transition-opacity duration-700 ${isLoaded ? "opacity-100" : "opacity-0"}`}
           priority
           placeholder="blur"
           blurDataURL={LOCAL_BLUR_DATA_URL}
+          onLoad={() => setIsLoaded(true)}
         />
-        <div className="absolute inset-0 bg-linear-to-r from-neutral-50 via-neutral-50/30 to-transparent" />
+        <div className="absolute inset-0 z-20 bg-linear-to-r from-neutral-50 via-neutral-50/30 to-transparent" />
       </motion.div>
 
       <motion.div

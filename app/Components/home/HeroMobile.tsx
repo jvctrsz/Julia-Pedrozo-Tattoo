@@ -1,11 +1,13 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
 import { motion } from "motion/react";
 import { ButtonNav } from "@/app/Components";
 import { LOCAL_BLUR_DATA_URL } from "@/src/Utils/imageUtils";
 
 export const HeroMobile = () => {
+  const [isLoaded, setIsLoaded] = useState(false);
   return (
     <section aria-label="Apresentação da Tatuadora" className="lg:hidden py-24 bg-neutral-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -18,15 +20,20 @@ export const HeroMobile = () => {
             className="m-0"
           >
             <div className="relative aspect-3/4 overflow-hidden">
+              <div
+                className={`absolute inset-0 z-10 transition-opacity duration-700 shimmer ${isLoaded ? "opacity-0 pointer-events-none" : "opacity-100"}`}
+                aria-hidden="true"
+              />
               <Image
                 src="/images/tattoo-principal.webp"
                 alt="Julia Pedrozo - Tatuadora em Sinop, MT"
                 fill
                 sizes="(max-width: 640px) calc(100vw - 2rem), calc(100vw - 3rem)"
-                className="object-cover"
+                className={`object-cover transition-opacity duration-700 ${isLoaded ? "opacity-100" : "opacity-0"}`}
                 priority
                 placeholder="blur"
                 blurDataURL={LOCAL_BLUR_DATA_URL}
+                onLoad={() => setIsLoaded(true)}
               />
             </div>
           </motion.figure>

@@ -1,11 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "motion/react";
 import SectionTitle from "../SectionTitle";
 import Image from "next/image";
 import tattooArt from "@/public/images/tattoo-art.webp";
 
 export const AboutStudioSection = () => {
+  const [isLoaded, setIsLoaded] = useState(false);
   return (
     <section aria-label="O Studio" className="py-24 lg:py-32 bg-neutral-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -33,13 +35,18 @@ export const AboutStudioSection = () => {
             transition={{ duration: 0.6 }}
             className="relative aspect-4/3 overflow-hidden m-0"
           >
+            <div
+              className={`absolute inset-0 z-10 transition-opacity duration-700 shimmer ${isLoaded ? "opacity-0 pointer-events-none" : "opacity-100"}`}
+              aria-hidden="true"
+            />
             <Image
               src={tattooArt}
               alt="Studio de tatuagem de Julia Pedrozo em Sinop, MT"
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
+              className={`object-cover transition-opacity duration-700 ${isLoaded ? "opacity-100" : "opacity-0"}`}
               placeholder="blur"
+              onLoad={() => setIsLoaded(true)}
             />
           </motion.figure>
         </div>
