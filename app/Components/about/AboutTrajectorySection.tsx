@@ -7,8 +7,21 @@ import Image from "next/image";
 import tattooPrincipal from "@/public/images/tattoo-principal.webp";
 import { classNames } from "@/src/miscellaneous";
 
+const calculateExperienceYears = () => {
+  const startDate = new Date(2022, 7, 1);
+  const today = new Date();
+  let years = today.getFullYear() - startDate.getFullYear();
+  const m = today.getMonth() - startDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < startDate.getDate())) {
+    years--;
+  }
+  return years;
+};
+
 export const AboutTrajectorySection = () => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const yearsOfExperience = calculateExperienceYears();
+
   return (
     <section aria-label="Trajetória da Artista" className="py-24 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -61,11 +74,11 @@ export const AboutTrajectorySection = () => {
                 meus primeiros passos oficiais na área.
               </p>
               <p>
-                Hoje, já são 3 anos trabalhando como tatuadora. Ao longo desse
-                tempo, me especializei em vários estilos, focando naquilo que
-                mais me traz inspiração: o Blackwork. Procuro evoluir minhas
-                técnicas a cada dia para entregar sempre a melhor qualidade em
-                cada trabalho.
+                Hoje, já são {yearsOfExperience} anos trabalhando como
+                tatuadora. Ao longo desse tempo, me especializei em vários
+                estilos, focando naquilo que mais me traz inspiração: o
+                Blackwork. Procuro evoluir minhas técnicas a cada dia para
+                entregar sempre a melhor qualidade em cada trabalho.
               </p>
               <p>
                 É uma imensa realização trabalhar com arte e ter me encontrado
