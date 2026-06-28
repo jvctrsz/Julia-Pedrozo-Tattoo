@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Julia Pedrozo Tattoo
 
-## Getting Started
+Site desenvolvido para uma tatuadora, com foco em seu portfólio. Entregando um site intuitivo, responsivo e que representa sua identidade visual.
 
-First, run the development server:
+O projeto foi criado com o foco de apresentar os trabalhos da tatuadora, facilitar o acesso às informações de contato e oferecer uma experiência simples, visual e objetiva para clientes.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Deploy
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Este é um projeto em produção com domínio próprio.
+* [www.juliapedrozotattoo.com.br](https://www.juliapedrozotattoo.com.br)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Sobre o projeto
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+O objetivo do projeto foi criar um portfólio digital profissional para a tatuadora Julia Pedrozo, reunindo informações sobre seu trabalho, estilos de tatuagem, portfólio, dúvidas frequentes e formas de contato.
 
-## Learn More
+Além das páginas públicas, o projeto também possui uma área administrativa para gerenciamento de imagens do portfólio.
 
-To learn more about Next.js, take a look at the following resources:
+## Funcionalidades
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+* Página inicial com os principais trabalhos
+* Página de portfólio
+* Página sobre a profissional
+* Página de contato
+* Página de perguntas frequentes
+* Layout responsivo
+* Área administrativa
+* Upload e gerenciamento de imagens
+* Integração com Cloudinary para armazenamento de imagens
+* Integração com PostgreSQL hospedado no Neon via Prisma
+* Deploy em produção com domínio próprio
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Tecnologias utilizadas
 
-## Deploy on Vercel
+* Next.js
+* React
+* TypeScript
+* Tailwind CSS
+* Prisma
+* Neon
+* Cloudinary
+* SWR
+* Vercel
+* Vercel Analytics
+* Vercel Speed Insights
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Aprendizados
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Este projeto foi meu primeiro contato prático com Next.js um projeto.
+
+Durante o desenvolvimento, pude entender melhor a estrutura do App Router, organização de páginas e deploy em produção com Vercel.
+
+Também tive que lidar com conceitos importantes de SEO e performance, aplicando boas práticas de estrutura semântica, metadados, responsividade e otimização de imagens. Com esses ajustes, o projeto alcançou scores entre 90 e 100 em SEO no Lighthouse e apresentou boas métricas de carregamento no Vercel Speed Insights.
+
+Além disso, o projeto reforçou minha experiência com entrega para cliente real, integração com serviços externos como Cloudinary e Neon.
+
+## Autor
+
+Desenvolvido por [João Victor Matias](https://github.com/jvctrsz).
+
+* [LinkedIn](https://www.linkedin.com/in/jvctrsz)
+* [E-mail](mailto:jvictor26dev@gmail.com)
