@@ -13,18 +13,19 @@ Este é um projeto em produção com domínio próprio.
 
 O objetivo do projeto foi criar um portfólio digital profissional para a tatuadora Julia Pedrozo, reunindo informações sobre seu trabalho, estilos de tatuagem, portfólio, dúvidas frequentes e formas de contato.
 
-Além das páginas públicas, o projeto também possui uma área administrativa para gerenciamento de imagens do portfólio.
+Além das páginas públicas, o projeto também possui uma área administrativa para gerenciamento separado de trabalhos realizados e artes disponíveis.
 
 ## Funcionalidades
 
 * Página inicial com os principais trabalhos
 * Página de portfólio
+* Página de artes disponíveis para tatuagem
 * Página sobre a profissional
 * Página de contato
 * Página de perguntas frequentes
 * Layout responsivo
 * Área administrativa
-* Upload e gerenciamento de imagens
+* Upload e gerenciamento separado de trabalhos realizados e artes disponíveis
 * Integração com Cloudinary para armazenamento de imagens
 * Integração com PostgreSQL hospedado no Neon via Prisma
 * Deploy em produção com domínio próprio
@@ -42,6 +43,26 @@ Além das páginas públicas, o projeto também possui uma área administrativa 
 * Vercel
 * Vercel Analytics
 * Vercel Speed Insights
+* Headless UI
+
+## Trabalhos realizados e artes disponíveis
+
+Os trabalhos são classificados no banco pelo campo `Image.type`:
+
+* `REALIZADO`: trabalhos concluídos exibidos em `/portfolio`;
+* `DISPONIVEL`: artes autorais disponíveis exibidas em `/disponiveis`.
+
+Registros anteriores à classificação permanecem como `REALIZADO` por meio do valor padrão definido no schema e na migration. O painel `/admin` possui áreas separadas para publicar, listar e excluir cada tipo.
+
+As rotas existentes aceitam o tipo público `realizado` ou `disponivel`:
+
+* `GET /api/images?type=realizado|disponivel` lista somente a coleção solicitada;
+* `POST /api/images` recebe `type` e exige autenticação;
+* `GET /api/cloudinary/sign?type=realizado|disponivel` escolhe a pasta no servidor.
+
+Uploads realizados continuam na pasta `tattoo-portfolio`. Artes disponíveis usam exclusivamente `tattoo-portfolio-disponiveis`. O cliente não pode escolher outra pasta, e o cadastro valida se o `publicId` pertence à pasta esperada.
+
+O painel usa Headless UI para a navegação acessível entre os dois tipos de trabalho.
 
 ## Aprendizados
 
