@@ -6,17 +6,15 @@ import Image from "next/image";
 import { MagnifyingGlassPlusIcon } from "@heroicons/react/24/outline";
 import { classNames } from "@/src/miscellaneous";
 import { optimizeImage } from "@/src/Utils/cloudinaryOptimization";
-import { LOCAL_BLUR_DATA_URL, preloadImage, getNextImageURL } from "@/src/Utils/imageUtils";
-
-interface Work {
-  id: string | number;
-  image: string;
-  title: string;
-  category: string;
-}
+import {
+  LOCAL_BLUR_DATA_URL,
+  preloadImage,
+  getNextImageURL,
+} from "@/src/Utils/imageUtils";
+import { WorkGalleryItem } from "@/src/types/work";
 
 interface WorkCardProps extends HTMLMotionProps<"li"> {
-  work: Work;
+  work: WorkGalleryItem;
   variant?: "featured" | "gallery";
 }
 
@@ -33,13 +31,16 @@ export const WorkCard = ({
   const src = optimizeImage(work.image, isFeatured ? 1200 : 800, "thumb");
 
   const handlePreload = useCallback(() => {
-    const src = isCloudinary ? optimizeImage(work.image, 1200, "full") : work.image;
+    const src = isCloudinary
+      ? optimizeImage(work.image, 1200, "full")
+      : work.image;
     preloadImage(getNextImageURL(src, 1200)).catch(() => {});
   }, [work.image, isCloudinary]);
 
   return (
     <motion.li
       tabIndex={0}
+      role="button"
       aria-label={`Ver ${work.title} em tela cheia`}
       {...rest}
       className={classNames(
@@ -49,6 +50,17 @@ export const WorkCard = ({
       )}
       onMouseEnter={handlePreload}
       onTouchStart={handlePreload}
+      onKeyDown={(event) => {
+        rest.onKeyDown?.(event);
+        if (
+          event.defaultPrevented ||
+          (event.key !== "Enter" && event.key !== " ")
+        ) {
+          return;
+        }
+        event.preventDefault();
+        event.currentTarget.click();
+      }}
     >
       <div
         aria-hidden="true"

@@ -3,47 +3,59 @@
 import { useMemo, useState } from "react";
 import useSWR from "swr";
 import { classNames } from "@/src/miscellaneous";
-import { PortfolioGallery } from "./PortfolioGallery";
 import { featuredWorks } from "@/src/Utils/mockData";
 import {
-  WorkImage,
   MAIN_WORK_CATEGORIES,
+  WorkGalleryItem,
+  WorkImage,
+  WorkType,
   WORK_CATEGORIES,
 } from "@/src/types/work";
+import { PortfolioGallery } from "./PortfolioGallery";
 
-interface PortfolioItem {
-  id: string | number;
-  image: string;
-  title: string;
-  category: string;
+interface WorksGridProps {
+  type: WorkType;
+  staticItems?: WorkGalleryItem[];
+  galleryLabel: string;
+  emptyMessage: string;
 }
 
 const categories = ["Todos", ...WORK_CATEGORIES];
 
-export const PortfolioGrid = () => {
+export const WorksGrid = ({
+  type,
+  staticItems = [],
+  galleryLabel,
+  emptyMessage,
+}: WorksGridProps) => {
   const [activeFilter, setActiveFilter] = useState("Todos");
+  const { data, error, isLoading } = useSWR<WorkImage[]>(
+    `/images?type=${type}`,
+  );
 
-  const { data, isLoading } = useSWR<WorkImage[]>("/images?type=realizado");
-
-  const dbItems: PortfolioItem[] = useMemo(
+  const databaseItems: WorkGalleryItem[] = useMemo(
     () =>
-      (data ?? []).map((img) => ({
-        id: img.id,
-        image: img.url,
-        title: img.title,
-        category: img.category,
+      (data ?? []).map((image) => ({
+        id: image.id,
+        image: image.url,
+        title: image.title,
+        category: image.category,
       })),
     [data],
   );
 
-  const allItems = useMemo(() => [...featuredWorks, ...dbItems], [dbItems]);
+  const allItems = useMemo(
+    () => [...staticItems, ...databaseItems],
+    [databaseItems, staticItems],
+  );
 
   const filteredItems = useMemo(() => {
     if (activeFilter === "Todos") return allItems;
-    if (activeFilter === "Outros")
+    if (activeFilter === "Outros") {
       return allItems.filter(
         (item) => !MAIN_WORK_CATEGORIES.includes(item.category),
       );
+    }
     return allItems.filter((item) => item.category === activeFilter);
   }, [allItems, activeFilter]);
 
@@ -58,10 +70,11 @@ export const PortfolioGrid = () => {
             {categories.map((category) => (
               <li key={category}>
                 <button
+                  type="button"
                   onClick={() => setActiveFilter(category)}
                   aria-pressed={activeFilter === category}
                   className={classNames(
-                    "px-6 py-2 text-sm uppercase tracking-wider whitespace-nowrap transition-all",
+                    "px-6 py-2 text-sm uppercase tracking-wider whitespace-nowrap transition-all cursor-pointer",
                     activeFilter === category
                       ? "bg-black text-white"
                       : "bg-neutral-100 text-black hover:bg-neutral-200",
@@ -84,9 +97,21 @@ export const PortfolioGrid = () => {
         filteredItems={filteredItems}
         activeFilter={activeFilter}
         isLoading={isLoading}
+        hasError={Boolean(error)}
+        galleryLabel={galleryLabel}
+        emptyMessage={emptyMessage}
       />
     </section>
   );
 };
+
+export const PortfolioGrid = () => (
+  <WorksGrid
+    type="realizado"
+    staticItems={featuredWorks}
+    galleryLabel="Itens do portfólio"
+    emptyMessage="Nenhum trabalho encontrado nesta categoria."
+  />
+);
 
 export default PortfolioGrid;

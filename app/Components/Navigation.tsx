@@ -14,6 +14,7 @@ const Navigation = () => {
   const navLinks = [
     { path: "/", label: "Home" },
     { path: "/portfolio", label: "Portfólio" },
+    { path: "/disponiveis", label: "Disponíveis" },
     { path: "/sobre", label: "Sobre" },
     { path: "/contatos", label: "Contatos" },
     { path: "/faq", label: "FAQ" },
@@ -33,7 +34,10 @@ const Navigation = () => {
             <span className="text-white/60">Pedrozo</span>
           </Link>
 
-          <ul className="hidden md:flex items-center gap-8" role="list">
+          <ul
+            className="hidden md:flex items-center gap-5 lg:gap-8"
+            role="list"
+          >
             {navLinks.map((link) => (
               <li key={link.path}>
                 <Link

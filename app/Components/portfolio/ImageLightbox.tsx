@@ -9,18 +9,19 @@ import {
   ChevronRightIcon,
 } from "@heroicons/react/24/outline";
 import { classNames } from "@/src/miscellaneous";
-import { optimizeImage, getCloudinaryBlurURL } from "@/src/Utils/cloudinaryOptimization";
-import { LOCAL_BLUR_DATA_URL, preloadImage, getNextImageURL } from "@/src/Utils/imageUtils";
-
-interface LightboxItem {
-  id: string | number;
-  image: string;
-  title: string;
-  category: string;
-}
+import {
+  optimizeImage,
+  getCloudinaryBlurURL,
+} from "@/src/Utils/cloudinaryOptimization";
+import {
+  LOCAL_BLUR_DATA_URL,
+  preloadImage,
+  getNextImageURL,
+} from "@/src/Utils/imageUtils";
+import { WorkGalleryItem } from "@/src/types/work";
 
 interface ImageLightboxProps {
-  items: LightboxItem[];
+  items: WorkGalleryItem[];
   currentIndex: number | null;
   onClose: () => void;
   onNavigate: (index: number) => void;
@@ -101,9 +102,11 @@ export const ImageLightbox = ({
     const prevIndex = (currentIndex - 1 + total) % total;
     const nextIndex = (currentIndex + 1) % total;
 
-    const preload = (item: LightboxItem) => {
+    const preload = (item: WorkGalleryItem) => {
       const isCloud = item.image.includes("res.cloudinary.com");
-      const src = isCloud ? optimizeImage(item.image, 1200, "full") : item.image;
+      const src = isCloud
+        ? optimizeImage(item.image, 1200, "full")
+        : item.image;
       preloadImage(getNextImageURL(src, 1200)).catch(() => {});
     };
 
@@ -151,7 +154,7 @@ export const ImageLightbox = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
-          className="fixed inset-0 z-[200] flex items-center justify-center bg-black/95"
+          className="fixed inset-0 z-200 flex items-center justify-center bg-black/95"
           onClick={onClose}
           role="dialog"
           aria-modal="true"
@@ -178,7 +181,10 @@ export const ImageLightbox = ({
 
           <button
             type="button"
-            onClick={(e) => { e.stopPropagation(); handlePrev(); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              handlePrev();
+            }}
             className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center size-11 border border-white/20 text-white/70 hover:text-white hover:border-white/60 transition-all cursor-pointer"
             aria-label="Imagem anterior"
           >
@@ -187,7 +193,10 @@ export const ImageLightbox = ({
 
           <button
             type="button"
-            onClick={(e) => { e.stopPropagation(); handleNext(); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleNext();
+            }}
             className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center size-11 border border-white/20 text-white/70 hover:text-white hover:border-white/60 transition-all cursor-pointer"
             aria-label="Próxima imagem"
           >
@@ -253,7 +262,10 @@ export const ImageLightbox = ({
               <button
                 key={i}
                 type="button"
-                onClick={(e) => { e.stopPropagation(); onNavigate(i); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onNavigate(i);
+                }}
                 aria-label={`Ir para imagem ${i + 1}`}
                 aria-current={i === currentIndex ? "true" : undefined}
                 className={classNames(

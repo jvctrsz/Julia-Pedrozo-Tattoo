@@ -30,6 +30,13 @@ export interface WorkImage {
   category: string;
 }
 
+export interface WorkGalleryItem {
+  id: string | number;
+  image: string;
+  title: string;
+  category: string;
+}
+
 export function isWorkType(value: unknown): value is WorkType {
   return typeof value === "string" && Object.hasOwn(WORK_TYPE_CONFIG, value);
 }

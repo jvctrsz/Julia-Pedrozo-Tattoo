@@ -4,30 +4,30 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import WorkCard from "./WorkCard";
 import { ImageLightbox } from "./ImageLightbox";
-
-interface PortfolioItem {
-  id: string | number;
-  image: string;
-  title: string;
-  category: string;
-}
+import { WorkGalleryItem } from "@/src/types/work";
 
 interface PortfolioGalleryProps {
-  filteredItems: PortfolioItem[];
+  filteredItems: WorkGalleryItem[];
   activeFilter: string;
   isLoading?: boolean;
+  hasError?: boolean;
+  galleryLabel?: string;
+  emptyMessage?: string;
 }
 
 export const PortfolioGallery = ({
   filteredItems,
   activeFilter,
   isLoading,
+  hasError,
+  galleryLabel = "Itens do portfólio",
+  emptyMessage = "Nenhum trabalho encontrado nesta categoria.",
 }: PortfolioGalleryProps) => {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   return (
     <>
-      <section aria-label="Itens do portfólio" className="py-12">
+      <section aria-label={galleryLabel} className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatePresence mode="wait">
             <motion.ul
@@ -52,6 +52,7 @@ export const PortfolioGallery = ({
               ))}
 
               {isLoading &&
+                !hasError &&
                 Array.from({ length: 6 }).map((_, i) => (
                   <motion.li
                     key={`skeleton-${i}`}
@@ -65,10 +66,14 @@ export const PortfolioGallery = ({
             </motion.ul>
           </AnimatePresence>
 
-          {!filteredItems.length && !isLoading && (
-            <p className="text-center text-black/40 py-24">
-              Nenhum trabalho encontrado nesta categoria.
+          {hasError && (
+            <p role="alert" className="text-center text-red-600 py-24">
+              Não foi possível carregar os trabalhos. Tente novamente.
             </p>
+          )}
+
+          {!filteredItems.length && !isLoading && !hasError && (
+            <p className="text-center text-black/40 py-24">{emptyMessage}</p>
           )}
         </div>
       </section>
