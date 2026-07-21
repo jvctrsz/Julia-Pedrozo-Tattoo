@@ -1,7 +1,15 @@
 import { NextRequest } from "next/server";
 import { jwtVerify, SignJWT } from "jose";
 
-const getSecret = () => new TextEncoder().encode(process.env.ADMIN_PASSWORD || "secret");
+const getSecret = () => {
+  const secret = process.env.ADMIN_PASSWORD;
+
+  if (!secret) {
+    throw new Error("ADMIN_PASSWORD não está configurada.");
+  }
+
+  return new TextEncoder().encode(secret);
+};
 
 export async function verifyToken(token: string | undefined): Promise<boolean> {
   if (!token) return false;
