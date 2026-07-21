@@ -35,8 +35,8 @@ export const ImageLightbox = ({
 }: ImageLightboxProps) => {
   const isOpen = currentIndex !== null;
   const total = items.length;
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
-  const prevIndexRef = useRef<number | null>(null);
+  const [loadedIndex, setLoadedIndex] = useState<number | null>(null);
+  const isImageLoaded = currentIndex !== null && loadedIndex === currentIndex;
 
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const triggerRef = useRef<Element | null>(null);
@@ -88,13 +88,6 @@ export const ImageLightbox = ({
     document.addEventListener("keydown", handleFocusTrap);
     return () => document.removeEventListener("keydown", handleFocusTrap);
   }, [isOpen]);
-
-  useEffect(() => {
-    if (currentIndex !== prevIndexRef.current) {
-      setIsImageLoaded(false);
-      prevIndexRef.current = currentIndex;
-    }
-  }, [currentIndex]);
 
   useEffect(() => {
     if (currentIndex === null || total === 0) return;
@@ -240,7 +233,7 @@ export const ImageLightbox = ({
                     ? getCloudinaryBlurURL(current.image)
                     : LOCAL_BLUR_DATA_URL
                 }
-                onLoad={() => setIsImageLoaded(true)}
+                onLoad={() => setLoadedIndex(currentIndex)}
               />
             </div>
 

@@ -82,7 +82,7 @@ const Footer = () => {
           </ul>
         </div>
       </div>
-      <small className="block py-8 text-center text-white/40 text-sm">
+      <small className="block py-8 text-center text-white/60 text-sm">
         &copy; {new Date().getFullYear()} JULIA PEDROZO. Todos os direitos reservados.
       </small>
     </footer>

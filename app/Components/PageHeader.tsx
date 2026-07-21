@@ -22,7 +22,7 @@ const PageHeader = ({ page, subTitle, title }: PageHeaderProps) => {
           style={{ fontFamily: "'Didot', serif" }}
         >
           <div className="flex items-center gap-4 mb-8">
-            <span className="text-black/30 text-xs uppercase tracking-[0.4em]">
+            <span className="text-black/55 text-xs uppercase tracking-[0.4em]">
               {page}
             </span>
             <div className="flex-1 h-px bg-black/10" />
@@ -35,7 +35,7 @@ const PageHeader = ({ page, subTitle, title }: PageHeaderProps) => {
               letterSpacing: 0,
             }}
           >
-            {title} <span className="font-light text-black/30">{subTitle}</span>
+            {title} <span className="font-light text-black/50">{subTitle}</span>
           </h1>
         </motion.div>
       </div>

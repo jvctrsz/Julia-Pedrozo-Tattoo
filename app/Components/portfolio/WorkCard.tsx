@@ -13,14 +13,16 @@ import {
 } from "@/src/Utils/imageUtils";
 import { WorkGalleryItem } from "@/src/types/work";
 
-interface WorkCardProps extends HTMLMotionProps<"li"> {
+interface WorkCardProps extends Omit<HTMLMotionProps<"li">, "onClick"> {
   work: WorkGalleryItem;
   variant?: "featured" | "gallery";
+  onOpen: () => void;
 }
 
 export const WorkCard = ({
   work,
   variant = "gallery",
+  onOpen,
   className = "",
   ...rest
 }: WorkCardProps) => {
@@ -39,9 +41,6 @@ export const WorkCard = ({
 
   return (
     <motion.li
-      tabIndex={0}
-      role="button"
-      aria-label={`Ver ${work.title} em tela cheia`}
       {...rest}
       className={classNames(
         "group relative overflow-hidden cursor-pointer",
@@ -50,17 +49,6 @@ export const WorkCard = ({
       )}
       onMouseEnter={handlePreload}
       onTouchStart={handlePreload}
-      onKeyDown={(event) => {
-        rest.onKeyDown?.(event);
-        if (
-          event.defaultPrevented ||
-          (event.key !== "Enter" && event.key !== " ")
-        ) {
-          return;
-        }
-        event.preventDefault();
-        event.currentTarget.click();
-      }}
     >
       <div
         aria-hidden="true"
@@ -101,20 +89,28 @@ export const WorkCard = ({
           <span className="text-white/60 text-xs uppercase tracking-wider mb-2 block">
             {work.category}
           </span>
-          <h3
+          <p
             className={classNames(
               "text-white",
               isFeatured ? "text-2xl" : "text-xl",
             )}
           >
             {work.title}
-          </h3>
+          </p>
 
           <div className="absolute top-4 right-4 flex items-center justify-center size-9 bg-white/10 border border-white/20 text-white backdrop-blur-sm">
             <MagnifyingGlassPlusIcon className="size-4" />
           </div>
         </figcaption>
       </figure>
+
+      <button
+        type="button"
+        onClick={onOpen}
+        onFocus={handlePreload}
+        aria-label={`Ver ${work.title} em tela cheia`}
+        className="absolute inset-0 z-10 cursor-pointer focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-white"
+      />
     </motion.li>
   );
 };
