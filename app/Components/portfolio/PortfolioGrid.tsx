@@ -5,6 +5,11 @@ import useSWR from "swr";
 import { classNames } from "@/src/miscellaneous";
 import { PortfolioGallery } from "./PortfolioGallery";
 import { featuredWorks } from "@/src/Utils/mockData";
+import {
+  WorkImage,
+  MAIN_WORK_CATEGORIES,
+  WORK_CATEGORIES,
+} from "@/src/types/work";
 
 interface PortfolioItem {
   id: string | number;
@@ -13,21 +18,12 @@ interface PortfolioItem {
   category: string;
 }
 
-interface DbImage {
-  id: string;
-  url: string;
-  title: string;
-  category: string;
-}
-
-const categories = ["Todos", "Blackwork", "Fine Line", "Floral", "Outros"];
-
-const MAIN_CATEGORIES = ["Blackwork", "Fine Line", "Floral"];
+const categories = ["Todos", ...WORK_CATEGORIES];
 
 export const PortfolioGrid = () => {
   const [activeFilter, setActiveFilter] = useState("Todos");
 
-  const { data, isLoading } = useSWR<DbImage[]>("/images");
+  const { data, isLoading } = useSWR<WorkImage[]>("/images?type=realizado");
 
   const dbItems: PortfolioItem[] = useMemo(
     () =>
@@ -46,7 +42,7 @@ export const PortfolioGrid = () => {
     if (activeFilter === "Todos") return allItems;
     if (activeFilter === "Outros")
       return allItems.filter(
-        (item) => !MAIN_CATEGORIES.includes(item.category),
+        (item) => !MAIN_WORK_CATEGORIES.includes(item.category),
       );
     return allItems.filter((item) => item.category === activeFilter);
   }, [allItems, activeFilter]);

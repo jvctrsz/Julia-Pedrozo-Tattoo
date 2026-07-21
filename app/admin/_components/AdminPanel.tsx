@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  useRef,
-  useState,
-  ChangeEvent,
-  FormEvent,
-} from "react";
+import { useRef, useState, ChangeEvent, FormEvent } from "react";
 import Image from "next/image";
 import {
   ArrowRightIcon,
@@ -17,25 +12,19 @@ import { classNames } from "@/src/miscellaneous";
 import { optimizeImage } from "@/src/Utils/cloudinaryOptimization";
 import api from "@/src/lib/api";
 import useSWR from "swr";
-
-interface ImageRecord {
-  id: string;
-  url: string;
-  publicId: string;
-  title: string;
-  category: string;
-  createdAt: string;
-}
-
-const CATEGORIES = ["Blackwork", "Fine Line", "Floral", "Outros"];
+import { WorkCategory, WorkImage, WORK_CATEGORIES } from "@/src/types/work";
 
 export default function AdminPanel() {
-  const { data: images = [], isLoading: loadingImages, mutate } = useSWR<ImageRecord[]>("/images");
+  const {
+    data: images = [],
+    isLoading: loadingImages,
+    mutate,
+  } = useSWR<WorkImage[]>("/images?type=realizado");
 
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [title, setTitle] = useState("");
-  const [category, setCategory] = useState(CATEGORIES[0]);
+  const [category, setCategory] = useState<WorkCategory>(WORK_CATEGORIES[0]);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -106,7 +95,7 @@ export default function AdminPanel() {
         category,
       });
       setTitle("");
-      setCategory(CATEGORIES[0]);
+      setCategory(WORK_CATEGORIES[0]);
       clearFile();
       await mutate();
     } catch (err) {
@@ -239,7 +228,7 @@ export default function AdminPanel() {
                   Categoria
                 </legend>
                 <div className="flex flex-wrap gap-2" role="group">
-                  {CATEGORIES.map((cat) => (
+                  {WORK_CATEGORIES.map((cat) => (
                     <button
                       key={cat}
                       type="button"
