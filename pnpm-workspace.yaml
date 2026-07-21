@@ -1,6 +1,27 @@
+allowBuilds:
+  '@prisma/engines': set this to true or false
+  prisma: set this to true or false
+  sharp: set this to true or false
+  unrs-resolver: set this to true or false
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver
+minimumReleaseAgeExclude:
+  - '@prisma/adapter-pg@7.9.0'
+  - '@prisma/client-runtime-utils@7.9.0'
+  - '@prisma/client@7.9.0'
+  - '@prisma/config@7.9.0'
+  - '@prisma/debug@7.9.0'
+  - '@prisma/driver-adapter-utils@7.9.0'
+  - '@prisma/engines@7.9.0'
+  - '@prisma/fetch-engine@7.9.0'
+  - '@prisma/get-platform@7.9.0'
+  - prisma@7.9.0
 onlyBuiltDependencies:
   - '@prisma/engines'
   - prisma
+overrides:
+  '@hono/node-server': 1.19.13
+  form-data: 4.0.6
+  hono: 4.12.31
+  postcss: 8.5.20
