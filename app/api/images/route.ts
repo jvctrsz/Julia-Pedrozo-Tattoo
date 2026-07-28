@@ -37,25 +37,33 @@ export async function POST(req: NextRequest) {
   const { url, publicId, title, category } = body;
   const type = body.type ?? DEFAULT_WORK_TYPE;
 
+  if (!isWorkType(type)) {
+    return NextResponse.json(
+      { error: "Tipo inválido. Use realizado ou disponivel." },
+      { status: 400 },
+    );
+  }
+
   if (
     typeof url !== "string" ||
     !url.trim() ||
     typeof publicId !== "string" ||
     !publicId.trim() ||
     typeof title !== "string" ||
-    !title.trim() ||
-    typeof category !== "string" ||
-    !category.trim()
+    !title.trim()
   ) {
     return NextResponse.json(
-      { error: "Campos obrigatórios: url, publicId, title, category" },
+      { error: "Campos obrigatórios: url, publicId e title" },
       { status: 400 },
     );
   }
 
-  if (!isWorkType(type)) {
+  if (
+    type === "realizado" &&
+    (typeof category !== "string" || !category.trim())
+  ) {
     return NextResponse.json(
-      { error: "Tipo inválido. Use realizado ou disponivel." },
+      { error: "Categoria obrigatória para trabalhos realizados" },
       { status: 400 },
     );
   }
@@ -71,8 +79,11 @@ export async function POST(req: NextRequest) {
     data: {
       url,
       publicId,
-      title,
-      category,
+      title: title.trim(),
+      category:
+        type === "realizado" && typeof category === "string"
+          ? category.trim()
+          : null,
       type: WORK_TYPE_CONFIG[type].databaseValue,
     },
   });

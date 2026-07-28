@@ -74,6 +74,8 @@ Também tive que lidar com conceitos importantes de SEO e performance, aplicando
 
 Além disso, o projeto reforçou minha experiência com entrega para cliente real, integração com serviços externos como Cloudinary e Neon.
 
+Categorias pertencem somente aos trabalhos realizados. Artes disponíveis não exigem categoria no upload, na API ou no banco, e são exibidas em uma galeria única sem filtros por categoria.
+
 ## Autor
 
 Desenvolvido por [João Victor Matias](https://github.com/jvctrsz).

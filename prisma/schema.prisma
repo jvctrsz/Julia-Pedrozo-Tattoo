@@ -16,7 +16,7 @@ model Image {
   url       String
   publicId  String   @unique
   title     String
-  category  String
+  category  String?
   type      WorkType @default(REALIZADO)
   createdAt DateTime @default(now())
 

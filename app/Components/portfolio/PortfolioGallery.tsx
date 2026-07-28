@@ -13,6 +13,7 @@ interface PortfolioGalleryProps {
   hasError?: boolean;
   galleryLabel?: string;
   emptyMessage?: string;
+  showCategory?: boolean;
 }
 
 export const PortfolioGallery = ({
@@ -22,6 +23,7 @@ export const PortfolioGallery = ({
   hasError,
   galleryLabel = "Itens do portfólio",
   emptyMessage = "Nenhum trabalho encontrado nesta categoria.",
+  showCategory = true,
 }: PortfolioGalleryProps) => {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
@@ -44,6 +46,7 @@ export const PortfolioGallery = ({
                   key={item.id}
                   work={item}
                   variant="gallery"
+                  showCategory={showCategory}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -83,6 +86,7 @@ export const PortfolioGallery = ({
         currentIndex={lightboxIndex}
         onClose={() => setLightboxIndex(null)}
         onNavigate={setLightboxIndex}
+        showCategory={showCategory}
       />
     </>
   );

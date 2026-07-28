@@ -43,6 +43,7 @@ export default function AdminWorkManager({
   listTitle,
   emptyMessage,
 }: AdminWorkManagerProps) {
+  const managesCategories = type === "realizado";
   const {
     data: images = [],
     error: imagesError,
@@ -136,7 +137,7 @@ export default function AdminWorkManager({
         url: secure_url,
         publicId: public_id,
         title: title.trim(),
-        category,
+        ...(managesCategories ? { category } : {}),
         type,
       });
 
@@ -305,29 +306,31 @@ export default function AdminWorkManager({
               />
             </div>
 
-            <fieldset>
-              <legend className="block text-xs uppercase tracking-widest text-black/40 mb-3">
-                Categoria
-              </legend>
-              <div className="flex flex-wrap gap-2">
-                {WORK_CATEGORIES.map((item) => (
-                  <button
-                    key={item}
-                    type="button"
-                    onClick={() => setCategory(item)}
-                    aria-pressed={category === item}
-                    className={classNames(
-                      "px-4 py-2 text-xs uppercase tracking-wider transition-all cursor-pointer",
-                      category === item
-                        ? "bg-black text-white"
-                        : "border border-black/20 text-black/60 hover:border-black/60 hover:text-black",
-                    )}
-                  >
-                    {item}
-                  </button>
-                ))}
-              </div>
-            </fieldset>
+            {managesCategories && (
+              <fieldset>
+                <legend className="block text-xs uppercase tracking-widest text-black/40 mb-3">
+                  Categoria
+                </legend>
+                <div className="flex flex-wrap gap-2">
+                  {WORK_CATEGORIES.map((item) => (
+                    <button
+                      key={item}
+                      type="button"
+                      onClick={() => setCategory(item)}
+                      aria-pressed={category === item}
+                      className={classNames(
+                        "px-4 py-2 text-xs uppercase tracking-wider transition-all cursor-pointer",
+                        category === item
+                          ? "bg-black text-white"
+                          : "border border-black/20 text-black/60 hover:border-black/60 hover:text-black",
+                      )}
+                    >
+                      {item}
+                    </button>
+                  ))}
+                </div>
+              </fieldset>
+            )}
 
             <button
               type="submit"
@@ -375,17 +378,25 @@ export default function AdminWorkManager({
                   <div className="relative aspect-3/4 bg-black/5 overflow-hidden">
                     <Image
                       src={optimizeImage(image.url, 600)}
-                      alt={`${image.title} — ${image.category}`}
+                      alt={
+                        managesCategories && image.category
+                          ? `${image.title} — ${image.category}`
+                          : image.title
+                      }
                       fill
                       sizes="(max-width: 640px) 50vw, 33vw"
                       className="object-cover"
                     />
                   </div>
                   <dl className="pt-3 space-y-0.5">
-                    <dt className="sr-only">Categoria</dt>
-                    <dd className="text-black/30 text-xs uppercase tracking-wider">
-                      {image.category}
-                    </dd>
+                    {managesCategories && image.category && (
+                      <>
+                        <dt className="sr-only">Categoria</dt>
+                        <dd className="text-black/30 text-xs uppercase tracking-wider">
+                          {image.category}
+                        </dd>
+                      </>
+                    )}
                     <dt className="sr-only">Título</dt>
                     <dd className="text-black text-sm truncate">
                       {image.title}
@@ -399,7 +410,7 @@ export default function AdminWorkManager({
                     disabled={deletingId === image.id}
                     aria-haspopup="dialog"
                     aria-label={`Excluir ${image.title}`}
-                    className="mt-3 inline-flex min-h-10 items-center gap-2 border border-black/20 px-3 py-2 text-xs uppercase tracking-widest text-black/60 transition-colors hover:border-red-600 hover:text-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black disabled:cursor-wait disabled:opacity-40"
+                    className="mt-3 inline-flex min-h-10 items-center gap-2 border border-black/20 px-3 py-2 text-xs uppercase tracking-widest text-black/60 transition-colors hover:border-red-600 hover:text-red-600 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-black disabled:cursor-wait disabled:opacity-40"
                   >
                     <TrashIcon className="size-4" aria-hidden="true" />
                     {deletingId === image.id ? "Excluindo..." : "Excluir"}
@@ -449,7 +460,7 @@ export default function AdminWorkManager({
                   deleteTriggerRef.current?.focus();
                 }}
                 disabled={Boolean(deletingId)}
-                className="min-h-11 border border-black/20 px-4 py-3 text-xs uppercase tracking-widest text-black/70 transition-colors hover:border-black hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black disabled:opacity-40"
+                className="min-h-11 border border-black/20 px-4 py-3 text-xs uppercase tracking-widest text-black/70 transition-colors hover:border-black hover:text-black focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-black disabled:opacity-40"
               >
                 Cancelar
               </button>
@@ -459,7 +470,7 @@ export default function AdminWorkManager({
                 data-dialog-focus="true"
                 onClick={confirmDelete}
                 disabled={Boolean(deletingId)}
-                className="inline-flex min-h-11 items-center justify-center gap-2 bg-red-700 px-4 py-3 text-xs uppercase tracking-widest text-white transition-colors hover:bg-red-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700 disabled:cursor-wait disabled:opacity-60"
+                className="inline-flex min-h-11 items-center justify-center gap-2 bg-red-700 px-4 py-3 text-xs uppercase tracking-widest text-white transition-colors hover:bg-red-800 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-red-700 disabled:cursor-wait disabled:opacity-60"
               >
                 <TrashIcon className="size-4" aria-hidden="true" />
                 {deletingId ? "Excluindo..." : "Excluir imagem"}

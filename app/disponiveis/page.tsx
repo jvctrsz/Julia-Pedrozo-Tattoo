@@ -32,7 +32,7 @@ export default function AvailableWorksPage() {
       <WorksGrid
         type="disponivel"
         galleryLabel="Artes disponíveis para tatuagem"
-        emptyMessage="Nenhuma arte disponível nesta categoria no momento."
+        emptyMessage="Nenhuma arte disponível no momento."
       />
 
       <section

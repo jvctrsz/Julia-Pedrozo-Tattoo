@@ -25,6 +25,7 @@ interface ImageLightboxProps {
   currentIndex: number | null;
   onClose: () => void;
   onNavigate: (index: number) => void;
+  showCategory?: boolean;
 }
 
 export const ImageLightbox = ({
@@ -32,6 +33,7 @@ export const ImageLightbox = ({
   currentIndex,
   onClose,
   onNavigate,
+  showCategory = true,
 }: ImageLightboxProps) => {
   const isOpen = currentIndex !== null;
   const total = items.length;
@@ -217,7 +219,11 @@ export const ImageLightbox = ({
               <Image
                 key={currentIndex}
                 src={optimizeImage(current.image, 1200, "full")}
-                alt={`${current.title} — ${current.category} por Julia Pedrozo`}
+                alt={
+                  showCategory && current.category
+                    ? `${current.title} — ${current.category} por Julia Pedrozo`
+                    : `${current.title} por Julia Pedrozo`
+                }
                 width={1080}
                 height={1350}
                 className={classNames(
@@ -238,9 +244,11 @@ export const ImageLightbox = ({
             </div>
 
             <figcaption className="mt-4 text-center">
-              <p className="text-white/40 text-xs uppercase tracking-widest mb-1">
-                {current.category}
-              </p>
+              {showCategory && current.category && (
+                <p className="text-white/40 text-xs uppercase tracking-widest mb-1">
+                  {current.category}
+                </p>
+              )}
               <p className="text-white text-sm tracking-wide">
                 {current.title}
               </p>

@@ -27,14 +27,14 @@ export interface WorkImage {
   id: string;
   url: string;
   title: string;
-  category: string;
+  category: string | null;
 }
 
 export interface WorkGalleryItem {
   id: string | number;
   image: string;
   title: string;
-  category: string;
+  category?: string;
 }
 
 export function isWorkType(value: unknown): value is WorkType {

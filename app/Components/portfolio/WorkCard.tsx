@@ -17,12 +17,14 @@ interface WorkCardProps extends Omit<HTMLMotionProps<"li">, "onClick"> {
   work: WorkGalleryItem;
   variant?: "featured" | "gallery";
   onOpen: () => void;
+  showCategory?: boolean;
 }
 
 export const WorkCard = ({
   work,
   variant = "gallery",
   onOpen,
+  showCategory = true,
   className = "",
   ...rest
 }: WorkCardProps) => {
@@ -61,7 +63,11 @@ export const WorkCard = ({
       <figure className="w-full h-full m-0 p-0 relative">
         <Image
           src={src}
-          alt={`${work.title} — ${work.category} por Julia Pedrozo`}
+          alt={
+            showCategory && work.category
+              ? `${work.title} — ${work.category} por Julia Pedrozo`
+              : `${work.title} por Julia Pedrozo`
+          }
           fill
           sizes={
             isFeatured
@@ -86,9 +92,11 @@ export const WorkCard = ({
               : "from-black/90 via-black/40 to-transparent",
           )}
         >
-          <span className="text-white/60 text-xs uppercase tracking-wider mb-2 block">
-            {work.category}
-          </span>
+          {showCategory && work.category && (
+            <span className="text-white/60 text-xs uppercase tracking-wider mb-2 block">
+              {work.category}
+            </span>
+          )}
           <p
             className={classNames(
               "text-white",
