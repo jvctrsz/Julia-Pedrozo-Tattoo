@@ -57,6 +57,10 @@ export default function AdminWorkManager({
   const [uploading, setUploading] = useState(false);
   const [feedback, setFeedback] = useState("");
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [pendingDelete, setPendingDelete] = useState<WorkImage | null>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const confirmDeleteRef = useRef<HTMLButtonElement>(null);
+  const deleteTriggerRef = useRef<HTMLButtonElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(
@@ -161,6 +165,56 @@ export default function AdminWorkManager({
     } finally {
       setDeletingId(null);
     }
+  };
+
+  useEffect(() => {
+    if (!pendingDelete) return;
+
+    confirmDeleteRef.current?.focus();
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && !deletingId) {
+        setPendingDelete(null);
+        deleteTriggerRef.current?.focus();
+        return;
+      }
+
+      if (event.key !== "Tab") return;
+
+      const focusableElements =
+        dialogRef.current?.querySelectorAll<HTMLElement>(
+          '[data-dialog-focus="true"]',
+        );
+      if (!focusableElements?.length) return;
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (event.shiftKey && document.activeElement === firstElement) {
+        event.preventDefault();
+        lastElement.focus();
+      } else if (!event.shiftKey && document.activeElement === lastElement) {
+        event.preventDefault();
+        firstElement.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [deletingId, pendingDelete]);
+
+  const requestDelete = (image: WorkImage, trigger: HTMLButtonElement) => {
+    setFeedback("");
+    deleteTriggerRef.current = trigger;
+    setPendingDelete(image);
+  };
+
+  const confirmDelete = async () => {
+    if (!pendingDelete) return;
+
+    await handleDelete(pendingDelete.id);
+    setPendingDelete(null);
+    deleteTriggerRef.current?.focus();
   };
 
   return (
@@ -317,26 +371,15 @@ export default function AdminWorkManager({
           ) : (
             <ul className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               {images.map((image) => (
-                <li key={image.id} className="group relative">
+                <li key={image.id} className="relative">
                   <div className="relative aspect-3/4 bg-black/5 overflow-hidden">
                     <Image
                       src={optimizeImage(image.url, 600)}
                       alt={`${image.title} — ${image.category}`}
                       fill
                       sizes="(max-width: 640px) 50vw, 33vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-cover"
                     />
-                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                      <button
-                        onClick={() => handleDelete(image.id)}
-                        disabled={deletingId === image.id}
-                        aria-label={`Excluir ${image.title}`}
-                        className="flex items-center gap-2 border border-white/40 text-white text-xs uppercase tracking-widest px-4 py-2 hover:bg-white hover:text-black transition-all disabled:opacity-40 cursor-pointer"
-                      >
-                        <TrashIcon className="size-4" />
-                        {deletingId === image.id ? "Excluindo…" : "Excluir"}
-                      </button>
-                    </div>
                   </div>
                   <dl className="pt-3 space-y-0.5">
                     <dt className="sr-only">Categoria</dt>
@@ -348,12 +391,83 @@ export default function AdminWorkManager({
                       {image.title}
                     </dd>
                   </dl>
+                  <button
+                    type="button"
+                    onClick={(event) =>
+                      requestDelete(image, event.currentTarget)
+                    }
+                    disabled={deletingId === image.id}
+                    aria-haspopup="dialog"
+                    aria-label={`Excluir ${image.title}`}
+                    className="mt-3 inline-flex min-h-10 items-center gap-2 border border-black/20 px-3 py-2 text-xs uppercase tracking-widest text-black/60 transition-colors hover:border-red-600 hover:text-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black disabled:cursor-wait disabled:opacity-40"
+                  >
+                    <TrashIcon className="size-4" aria-hidden="true" />
+                    {deletingId === image.id ? "Excluindo..." : "Excluir"}
+                  </button>
                 </li>
               ))}
             </ul>
           )}
         </section>
       </div>
+
+      {pendingDelete && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+          role="presentation"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget && !deletingId) {
+              setPendingDelete(null);
+              deleteTriggerRef.current?.focus();
+            }
+          }}
+        >
+          <div
+            ref={dialogRef}
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby={`delete-title-${type}`}
+            aria-describedby={`delete-description-${type}`}
+            className="w-full max-w-md bg-white p-6 shadow-xl"
+          >
+            <h2 id={`delete-title-${type}`} className="text-lg text-black">
+              Excluir imagem?
+            </h2>
+            <p
+              id={`delete-description-${type}`}
+              className="mt-3 text-sm leading-6 text-black/60"
+            >
+              A imagem &quot;{pendingDelete.title}&quot; será removida
+              permanentemente do painel e do armazenamento.
+            </p>
+            <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+              <button
+                type="button"
+                data-dialog-focus="true"
+                onClick={() => {
+                  setPendingDelete(null);
+                  deleteTriggerRef.current?.focus();
+                }}
+                disabled={Boolean(deletingId)}
+                className="min-h-11 border border-black/20 px-4 py-3 text-xs uppercase tracking-widest text-black/70 transition-colors hover:border-black hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black disabled:opacity-40"
+              >
+                Cancelar
+              </button>
+              <button
+                ref={confirmDeleteRef}
+                type="button"
+                data-dialog-focus="true"
+                onClick={confirmDelete}
+                disabled={Boolean(deletingId)}
+                className="inline-flex min-h-11 items-center justify-center gap-2 bg-red-700 px-4 py-3 text-xs uppercase tracking-widest text-white transition-colors hover:bg-red-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700 disabled:cursor-wait disabled:opacity-60"
+              >
+                <TrashIcon className="size-4" aria-hidden="true" />
+                {deletingId ? "Excluindo..." : "Excluir imagem"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
