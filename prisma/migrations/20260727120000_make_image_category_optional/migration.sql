@@ -1,0 +1,1 @@
+ALTER TABLE "Image" ALTER COLUMN "category" DROP NOT NULL;
